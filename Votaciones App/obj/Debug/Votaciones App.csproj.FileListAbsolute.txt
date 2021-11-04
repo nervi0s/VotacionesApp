@@ -1,0 +1,9 @@
+C:\Users\Dani\Google Drive\Virtualia\Votaciones App\Votaciones App\Votaciones App\bin\Debug\Votaciones App.exe.config
+C:\Users\Dani\Google Drive\Virtualia\Votaciones App\Votaciones App\Votaciones App\bin\Debug\Votaciones App.exe
+C:\Users\Dani\Google Drive\Virtualia\Votaciones App\Votaciones App\Votaciones App\bin\Debug\Votaciones App.pdb
+C:\Users\Dani\Google Drive\Virtualia\Votaciones App\Votaciones App\Votaciones App\obj\Debug\Votaciones App.csprojResolveAssemblyReference.cache
+C:\Users\Dani\Google Drive\Virtualia\Votaciones App\Votaciones App\Votaciones App\obj\Debug\Votaciones_App.FormPpal.resources
+C:\Users\Dani\Google Drive\Virtualia\Votaciones App\Votaciones App\Votaciones App\obj\Debug\Votaciones_App.Properties.Resources.resources
+C:\Users\Dani\Google Drive\Virtualia\Votaciones App\Votaciones App\Votaciones App\obj\Debug\Votaciones App.csproj.GenerateResource.Cache
+C:\Users\Dani\Google Drive\Virtualia\Votaciones App\Votaciones App\Votaciones App\obj\Debug\Votaciones App.exe
+C:\Users\Dani\Google Drive\Virtualia\Votaciones App\Votaciones App\Votaciones App\obj\Debug\Votaciones App.pdb

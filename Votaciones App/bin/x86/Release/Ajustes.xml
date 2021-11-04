@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<Ajustes>
+  <MandosInferior>1</MandosInferior>
+  <MandosSuperior>3000</MandosSuperior>
+  <TiempoCrono>100</TiempoCrono>
+  <PermitirCambioRespuesta>False</PermitirCambioRespuesta>
+  <TipoVotacion>0</TipoVotacion>
+  <NumeroOpciones>3</NumeroOpciones>
+  <BaseAntena>4</BaseAntena>
+  <RutaResultados>C:\Users\Carol\Desktop\</RutaResultados>
+  <ConexionGrafismo>False</ConexionGrafismo>
+  <Ip>
+  </Ip>
+</Ajustes>
