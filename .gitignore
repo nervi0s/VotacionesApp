@@ -353,3 +353,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Votaciones App/obj/Debug/TempPE/Properties.Resources.Designer.cs.dll
