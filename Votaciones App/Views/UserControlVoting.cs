@@ -16,24 +16,22 @@ namespace Votaciones_App.Views
 {
     public partial class UserControlVoting : UserControl
     {
-
-        private Action<string> changeToSettingPanel;
         public bool voting { get; set; }
         private int tipo_recuento = 0;
         FormResultados ventana_resultados;
         int[] recuenta_opciones;
 
-        public UserControlVoting(Action<string> changeToSettingPanel)
+        public UserControlVoting()
         {
             InitializeComponent();
             this.Dock = DockStyle.Fill;
-            this.changeToSettingPanel = changeToSettingPanel;
+
             this.label_contador.Text = CAjustes.tiempo_crono.ToString();
         }
 
         private void panel_go_ajustes_Click(object sender, EventArgs e)
         {
-            this.changeToSettingPanel("");
+            //this.changeToSettingPanel("");
         }
 
         private void UserControlVoting_Paint(object sender, PaintEventArgs e)

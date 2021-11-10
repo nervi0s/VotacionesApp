@@ -118,6 +118,7 @@ namespace Votaciones_App.Views
             this.textBox_id.Size = new System.Drawing.Size(126, 20);
             this.textBox_id.TabIndex = 5;
             this.textBox_id.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBox_id.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_id_KeyPress);
             // 
             // UserControlConnectionChoice
             // 

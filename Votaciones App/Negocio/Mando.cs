@@ -11,6 +11,7 @@ namespace Votaciones_App
         public bool respondido;
         public string respuesta;
         public int id;
+
         public Mando(int id)
         {
             this.id = id;

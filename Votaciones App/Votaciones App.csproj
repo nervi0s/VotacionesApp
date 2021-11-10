@@ -83,11 +83,11 @@
     <Compile Include="Formularios\FormMandosConfig.Designer.cs">
       <DependentUpon>FormMandosConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\FormPpal.cs">
+    <Compile Include="Formularios\FormPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\FormPpal.Designer.cs">
-      <DependentUpon>FormPpal.cs</DependentUpon>
+    <Compile Include="Formularios\FormPrincipal.Designer.cs">
+      <DependentUpon>FormPrincipal.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\FormResultados.cs">
       <SubType>Form</SubType>
@@ -100,6 +100,7 @@
     <Compile Include="Negocio\CFileXML.cs" />
     <Compile Include="Negocio\CSeguridad.cs" />
     <Compile Include="Negocio\Mando.cs" />
+    <Compile Include="Negocio\VoteManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\UserControlConnectionChoice.cs">
@@ -107,12 +108,6 @@
     </Compile>
     <Compile Include="Views\UserControlConnectionChoice.Designer.cs">
       <DependentUpon>UserControlConnectionChoice.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControlGraph.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\UserControlGraph.Designer.cs">
-      <DependentUpon>UserControlGraph.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControlSettings.cs">
       <SubType>UserControl</SubType>
@@ -132,8 +127,8 @@
     <EmbeddedResource Include="Formularios\FormMandosConfig.resx">
       <DependentUpon>FormMandosConfig.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\FormPpal.resx">
-      <DependentUpon>FormPpal.cs</DependentUpon>
+    <EmbeddedResource Include="Formularios\FormPrincipal.resx">
+      <DependentUpon>FormPrincipal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\FormResultados.resx">
       <DependentUpon>FormResultados.cs</DependentUpon>
@@ -150,9 +145,6 @@
     </Compile>
     <EmbeddedResource Include="Views\UserControlConnectionChoice.resx">
       <DependentUpon>UserControlConnectionChoice.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\UserControlGraph.resx">
-      <DependentUpon>UserControlGraph.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\UserControlSettings.resx">
       <DependentUpon>UserControlSettings.cs</DependentUpon>

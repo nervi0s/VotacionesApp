@@ -113,6 +113,7 @@ namespace Votaciones_App.Formularios
             this.textBox_mandos.Name = "textBox_mandos";
             this.textBox_mandos.Size = new System.Drawing.Size(306, 20);
             this.textBox_mandos.TabIndex = 7;
+            this.textBox_mandos.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_mandos_KeyPress);
             // 
             // panel_botton
             // 
