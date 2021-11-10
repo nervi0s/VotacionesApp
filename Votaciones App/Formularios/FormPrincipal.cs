@@ -1,21 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Threading;
 using System.IO;
 using System.Collections;
-using SunVote;
-using System.Net;
-using System.Net.Sockets;
 using Votaciones_App.Views;
-using System.Text.RegularExpressions;
-using Votaciones_App.Formularios;
+using Votaciones_App.Negocio;
 
 namespace Votaciones_App
 {
@@ -24,6 +12,8 @@ namespace Votaciones_App
         UserControlConnectionChoice connectionChoicePanel;
         UserControlSettings settingsPanel;
         UserControlVoting votingPanel;
+
+        VoteManager voteManager;
 
         CFileXML xmlFile = new CFileXML();
 
@@ -55,7 +45,7 @@ namespace Votaciones_App
         private void loadConnectionChoisePanel()
         {
             this.connectionChoicePanel = new UserControlConnectionChoice();
-            this.connectionChoicePanel.communicatorCallBack += customsViewsCommManager;
+            this.connectionChoicePanel.communicatorCallBack += customsViewsCommHandler;
             this.panel_root.Controls.Add(connectionChoicePanel);
         }
 
@@ -63,7 +53,7 @@ namespace Votaciones_App
         private void loadSettingsPanel()
         {
             this.settingsPanel = new UserControlSettings();
-            this.settingsPanel.communicatorCallBack += customsViewsCommManager;
+            this.settingsPanel.communicatorCallBack += customsViewsCommHandler;
             this.panel_root.Controls.Add(settingsPanel);
         }
 
@@ -85,20 +75,58 @@ namespace Votaciones_App
             this.panel_root.Controls.Remove(this.settingsPanel);
         }
 
-        // Maneja las llamades desde otros paneles
-        private void customsViewsCommManager(string msg)
+        // Maneja las llamadas desde otros paneles
+        private void customsViewsCommHandler(string msg)
         {
             if (msg.Contains("UserControlConnectionChoice"))
             {
                 loadMultichoiseSelecctionDialog();
                 removeConnectionChoicePanel();
+                initializeVoteManager();
                 loadSettingsPanel();
             }
             else if (msg.Contains("UserControlSettings"))
             {
                 removeSettingsPanel();
-                loadXmlToMemory();
                 loadVotingPanel();
+            }
+        }
+
+        // Maneja las llamada desde VoteManager
+        private void voteManagerCommHandler(int status)
+        {
+            switch (status)
+            {
+                case 0:
+                    this.settingsPanel.setImageConnectionStatus(Properties.Resources.rojo);
+                    // ToDo quizas deshabilitar botón apagar mandos del panel votingPanel
+                    this.settingsPanel.setEnableButtonAceptar(false);
+                    break;
+                case 1:
+                    this.settingsPanel.setImageConnectionStatus(Properties.Resources.verde);
+                    // ToDo quizas habilitar botón apagar mandos del panel votingPanel
+                    this.settingsPanel.setEnableButtonAceptar(true);
+                    break;
+                case -1:
+                    this.settingsPanel.setImageConnectionStatus(Properties.Resources.rojo);
+                    // ToDo quizas deshabilitar botón apagar mandos del panel votingPanel
+                    this.settingsPanel.setEnableButtonAceptar(false);
+                    break;
+                case -2:
+                    this.settingsPanel.setImageConnectionStatus(Properties.Resources.rojo);
+                    // ToDo quizas deshabilitar botón apagar mandos del panel votingPanel
+                    this.settingsPanel.setEnableButtonAceptar(false);
+                    break;
+                case -3:
+                    this.settingsPanel.setImageConnectionStatus(Properties.Resources.rojo);
+                    // ToDo quizas deshabilitar botón apagar mandos del panel votingPanel
+                    this.settingsPanel.setEnableButtonAceptar(false);
+                    break;
+                case -4:
+                    this.settingsPanel.setImageConnectionStatus(Properties.Resources.rojo);
+                    // ToDo quizas deshabilitar botón apagar mandos del panel votingPanel
+                    this.settingsPanel.setEnableButtonAceptar(false);
+                    break;
             }
         }
 
@@ -147,26 +175,6 @@ namespace Votaciones_App
             }
         }
 
-        // Lee el XML para setear las variables de la clase CAjustes
-        private void loadXmlToMemory()
-        {
-            // Cargar los ajustes del fichero XML en memoria
-            CAjustes.num_mandos = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales"));
-            CAjustes.rangos = xmlFile.LeerXml(CAjustes.ruta_ajustes, "Rangos");
-            CAjustes.tiempo_crono = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "TiempoCrono"));
-            CAjustes.base_antena_id = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "BaseAntena"));
-            CAjustes.permitir_cambio_respuesta = bool.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "PermitirCambioRespuesta"));
-            CAjustes.tipo_votacion = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "TipoVotacion"));
-            CAjustes.numero_opciones = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "NumeroOpciones"));
-            CAjustes.ruta_resultados = xmlFile.LeerXml(CAjustes.ruta_ajustes, "RutaResultados");
-            CAjustes.conexion_grafismo = bool.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "ConexionGrafismo"));
-            CAjustes.ip = xmlFile.LeerXml(CAjustes.ruta_ajustes, "Ip");
-            CAjustes.ip_antena = xmlFile.LeerXml(CAjustes.ruta_ajustes, "IpAntena");
-            CAjustes.mac_antena = xmlFile.LeerXml(CAjustes.ruta_ajustes, "MacAntena");
-            CAjustes.mask_antena = xmlFile.LeerXml(CAjustes.ruta_ajustes, "MaskAntena");
-            CAjustes.gateway_antena = xmlFile.LeerXml(CAjustes.ruta_ajustes, "GatewayAntena");
-        }
-
         // Carga un diálogo de selección para la multirespuesta
         private void loadMultichoiseSelecctionDialog()
         {
@@ -174,11 +182,19 @@ namespace Votaciones_App
             string title = "Multichoice selector";
             DialogResult dialogResult = MessageBox.Show(message, title, MessageBoxButtons.YesNo);
 
-            if (dialogResult == DialogResult.Yes)
-                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "PermitirMultichoice", "True");
-            else
-                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "PermitirMultichoice", "False");
+            // Se guardan en el fichero los datos proporcionados desde la UI
+            xmlFile.EscribirXml(CAjustes.ruta_ajustes, "PermitirMultichoice", dialogResult == DialogResult.Yes ? "True" : "False");
+
+            // Se cargan en memoria (clase CAjustes) los ajustes
+            CAjustes.permitir_cambio_respuesta = dialogResult == DialogResult.Yes;
         }
 
+        // Inicializa una instancia de VoteManager
+        private void initializeVoteManager()
+        {
+            this.voteManager = new VoteManager(CAjustes.base_antena_id, CAjustes.tipo_conexion);
+            this.voteManager.communicatorCallBack += voteManagerCommHandler;
+            this.voteManager.connectToAntena();
+        }
     }
 }

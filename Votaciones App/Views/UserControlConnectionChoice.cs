@@ -31,7 +31,12 @@ namespace Votaciones_App.Views
             {
                 CAjustes.tipo_conexion = 1;
 
+                // Se guardan en el fichero los datos proporcionados desde la UI
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "BaseAntena", this.textBox_id.Text);
+
+                // Se cargan en memoria (clase CAjustes) los ajustes
+                CAjustes.base_antena_id = int.Parse(this.textBox_id.Text);
+
                 this.communicatorCallBack("UserControlConnectionChoice"); // Comunicación al Form Principal
             }
         }
@@ -48,7 +53,12 @@ namespace Votaciones_App.Views
 
                 if (ethernetOptions.ShowDialog() == DialogResult.OK)
                 {
+                    // Se guardan en el fichero los datos proporcionados desde la UI
                     xmlFile.EscribirXml(CAjustes.ruta_ajustes, "BaseAntena", this.textBox_id.Text);
+
+                    // Se cargan en memoria (clase CAjustes) los ajustes
+                    CAjustes.base_antena_id = int.Parse(this.textBox_id.Text);
+
                     this.communicatorCallBack("UserControlConnectionChoice"); // Comunicación al Form Principal
                 }
             }

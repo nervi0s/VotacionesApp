@@ -31,6 +31,12 @@ namespace Votaciones_App.Formularios
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "MaskAntena", this.textBox_mask.Text);
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "GatewayAntena", this.textBox_gateway.Text);
 
+                // Se cargan en memoria (clase CAjustes) los ajustes
+                CAjustes.ip_antena = this.textBox_ip.Text;
+                CAjustes.mac_antena = this.textBox_mac.Text;
+                CAjustes.mask_antena = this.textBox_mask.Text;
+                CAjustes.gateway_antena = this.textBox_gateway.Text;
+
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }

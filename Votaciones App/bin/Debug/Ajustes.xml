@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<Ajustes>
+  <MandosTotales>50</MandosTotales>
+  <Rangos>1-50</Rangos>
+  <TiempoCrono>120</TiempoCrono>
+  <BaseAntena>1</BaseAntena>
+  <PermitirCambioRespuesta>False</PermitirCambioRespuesta>
+  <PermitirMultichoice>True</PermitirMultichoice>
+  <TipoVotacion>0</TipoVotacion>
+  <NumeroOpciones>3</NumeroOpciones>
+  <RutaResultados>C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\bin\Debug\</RutaResultados>
+  <ConexionGrafismo>False</ConexionGrafismo>
+  <Ip>127.0.0.1</Ip>
+  <IpAntena>192.168.0.199</IpAntena>
+  <MacAntena>74-30-13-02-05-36</MacAntena>
+  <MaskAntena>255.255.255.0</MaskAntena>
+  <GatewayAntena>192.168.0.1</GatewayAntena>
+</Ajustes>

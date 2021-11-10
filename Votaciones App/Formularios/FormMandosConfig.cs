@@ -28,6 +28,10 @@ namespace Votaciones_App.Formularios
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "MandosTotales", this.textBox_mandos.Text);
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Rangos", this.textBox_rangos.Text);
 
+                // Se cargan en memoria (clase CAjustes) los ajustes
+                CAjustes.num_mandos = int.Parse(this.textBox_mandos.Text);
+                CAjustes.rangos = this.textBox_rangos.Text;
+
                 this.numeroTotalMandos = counterFromString(this.textBox_rangos.Text);
 
                 this.DialogResult = DialogResult.OK;

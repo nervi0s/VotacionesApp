@@ -78,6 +78,15 @@ namespace Votaciones_App.Views
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Ip", this.textBox_ip.Text);
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "RutaResultados", this.textBox_ajustes_resultados_path.Text);
 
+                // Se cargan en memoria (clase CAjustes) los ajustes
+                CAjustes.tiempo_crono = (int)this.numericUpDown_ajustes_tiempo_crono.Value;
+                CAjustes.permitir_cambio_respuesta = this.radioButton_ajustes_cambiar_resp_Si.Checked;
+                CAjustes.tipo_votacion = this.comboBox_ajustes_tipo_votacion.SelectedIndex;
+                CAjustes.numero_opciones = (int)this.numericUpDown_ajustes_num_opciones.Value;
+                CAjustes.conexion_grafismo = this.radioButton_ajustes_conexion_grafismo_Si.Checked;
+                CAjustes.ip = this.textBox_ip.Text;
+                CAjustes.ruta_resultados = this.textBox_ajustes_resultados_path.Text;
+
                 this.communicatorCallBack("UserControlSettings"); // Comunicación al Form Principal
             }
         }
