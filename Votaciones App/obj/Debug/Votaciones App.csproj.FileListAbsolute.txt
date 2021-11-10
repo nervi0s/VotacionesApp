@@ -1,0 +1,19 @@
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\bin\Debug\Votaciones App.exe.config
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\bin\Debug\Votaciones App.exe
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\bin\Debug\Votaciones App.pdb
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.csproj.AssemblyReference.cache
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Interop.SunVote.dll
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.csproj.ResolveComReference.cache
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Formularios.EthernetOptions.resources
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Formularios.FormMandosConfig.resources
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.FormPpal.resources
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.FormResultados.resources
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Properties.Resources.resources
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Views.UserControlConnectionChoice.resources
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Views.UserControlGraph.resources
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Views.UserControlSettings.resources
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Views.UserControlVoting.resources
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.csproj.GenerateResource.cache
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.csproj.CoreCompileInputs.cache
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.exe
+C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.pdb
