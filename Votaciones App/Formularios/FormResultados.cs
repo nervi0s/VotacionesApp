@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Collections;
+using Votaciones_App.Formularios;
 
 namespace Votaciones_App
 {
@@ -55,6 +56,8 @@ namespace Votaciones_App
 
         public void inicializa_grid()
         {
+            List<int> ids = FormMandosConfig.createIDsList();
+
             if (inicializado)
             {
                 for (int i = 0; i < dataGridView1.Columns.Count; i++)
@@ -64,10 +67,10 @@ namespace Votaciones_App
                         dataGridView1.Rows[j].Cells[i].Value = "";
                     }
                 }
-
+                
                 for (int j = 0; j < dataGridView1.Rows.Count; j++)
                 {
-                    //dataGridView1.Rows[j].Cells[0].Value = j + CAjustes.mando_inferior;
+                    dataGridView1.Rows[j].Cells[0].Value = ids[j];
                 }
                 dataGridView1.ClearSelection();
                 return;
@@ -94,7 +97,7 @@ namespace Votaciones_App
             //Meto las filas
             for (int i = 0; i < CAjustes.num_mandos; i++)
             {
-                //this.dataGridView1.Rows.Add(i + CAjustes.mando_inferior, "");
+                this.dataGridView1.Rows.Add(ids[i], "");
             }
 
 
@@ -110,9 +113,5 @@ namespace Votaciones_App
             dataGridView1.ClearSelection();
             inicializado = true;
         } 
-
-        
-
-
     }
 }

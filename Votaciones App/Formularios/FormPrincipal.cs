@@ -61,7 +61,8 @@ namespace Votaciones_App
         private void loadVotingPanel()
         {
             this.votingPanel = new UserControlVoting();
-            //this.settingsPanel.communicatorCallBack += customsViewsCommManager;
+            this.voteManager.setVotingPanel(this.votingPanel);
+            this.votingPanel.communicatorCallBack += customsViewsCommHandler;
             this.panel_root.Controls.Add(votingPanel);
         }
 
@@ -89,6 +90,29 @@ namespace Votaciones_App
             {
                 removeSettingsPanel();
                 loadVotingPanel();
+            }
+            else if (msg.Contains("UserControlVoting"))
+            {
+                if (msg.Contains("cambiaPanel"))
+                {
+                    //ToDo cambiar entre paneles
+                    //voteMan resetVota
+                    // panelVota tiempoCrono CA
+                    // panelVota rojo
+                }
+                else if (msg.Contains("iniciaVotacion"))
+                {
+                    if (!voteManager.isVoting())
+                    {
+                        voteManager.resetVotacion();
+                        voteManager.iniciaVotacion();
+                        // panelVota verde
+                    }
+                }
+                else if (msg.Contains("recuentoClick"))
+                {
+                    this.voteManager.actulizarRecuento();
+                }
             }
         }
 
@@ -173,6 +197,11 @@ namespace Votaciones_App
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "MaskAntena", "255.255.255.0");
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "GatewayAntena", "192.168.0.1");
             }
+            else
+            {   // Se cargan en memoria ajustes básicos
+                CAjustes.num_mandos = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales"));
+                CAjustes.rangos = xmlFile.LeerXml(CAjustes.ruta_ajustes, "Rangos");
+            }
         }
 
         // Carga un diálogo de selección para la multirespuesta
@@ -186,7 +215,7 @@ namespace Votaciones_App
             xmlFile.EscribirXml(CAjustes.ruta_ajustes, "PermitirMultichoice", dialogResult == DialogResult.Yes ? "True" : "False");
 
             // Se cargan en memoria (clase CAjustes) los ajustes
-            CAjustes.permitir_cambio_respuesta = dialogResult == DialogResult.Yes;
+            CAjustes.permitir_multichoice = dialogResult == DialogResult.Yes;
         }
 
         // Inicializa una instancia de VoteManager

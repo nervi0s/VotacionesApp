@@ -16,9 +16,13 @@ namespace Votaciones_App.Views
 {
     public partial class UserControlVoting : UserControl
     {
+        public delegate void CommunicatorDelegate(string msg);
+        public CommunicatorDelegate communicatorCallBack;
+
+        private int tipoRecuento = 0;
+        FormResultados ventanaResultados;
+
         public bool voting { get; set; }
-        private int tipo_recuento = 0;
-        FormResultados ventana_resultados;
         int[] recuenta_opciones;
 
         public UserControlVoting()
@@ -28,10 +32,214 @@ namespace Votaciones_App.Views
 
             this.label_contador.Text = CAjustes.tiempo_crono.ToString();
         }
+        private void UserControlVoting_Load(object sender, EventArgs e)
+        {
+            this.ventanaResultados = new FormResultados(new Point(this.Left + this.Width, this.Top));
+            this.estado_conexion_grafismo = 0;
+            if (CAjustes.conexion_grafismo)
+            {
+                // Cliente
+                if (conecta_cliente())
+                {
+
+                    this.estado_conexion_grafismo = 1;
+                }
+                else
+                {
+                    this.estado_conexion_grafismo = 1;
+                    inicia_reconexion_cliente();
+                }
+            }
+        }
 
         private void panel_go_ajustes_Click(object sender, EventArgs e)
         {
-            //this.changeToSettingPanel("");
+            communicatorCallBack("UserControlVoting-cambiaPanel");
+        }
+        private void panel_play_Click(object sender, EventArgs e)
+        {
+            communicatorCallBack("UserControlVoting-iniciaVotacion");
+
+            if (!this.voting)
+            {
+                //this.voting = true;
+
+                //((FormPpal)(this.Parent.Parent)).reset_votacion();
+                //this.ventanaResultados.inicializa_grid();
+                //this.panel_indicador_estado.BackgroundImage = Votaciones_App.Properties.Resources.verde;
+                //if (CAjustes.tipo_votacion == 2)
+                //{
+                //    this.recuenta_opciones = new int[2];
+                //}
+                //else
+                //{
+                //    this.recuenta_opciones = new int[CAjustes.numero_opciones];
+                //}
+
+                //inicializarGrafica();
+
+                if (CAjustes.conexion_grafismo)
+                {
+                    envia_mensaje_progamaExterno("Play");
+                }
+
+
+
+                // Arranca el programa
+                switch (CAjustes.tipo_votacion)
+                {
+                    case 0: // Numeros
+                        if (this._choice == null)
+                        {
+                            this._choice = new Choices();
+                            _choice.KeyStatus += new IChoicesEvents_KeyStatusEventHandler(keyStatus);
+                        }
+
+
+                        //this._choice.BaseConnection = ((FormPpal)(this.Parent.Parent)).getBase();
+
+                        this._choice.OptionsMode = 1;
+
+                        if (CAjustes.permitir_cambio_respuesta)
+                        {
+                            this._choice.ModifyMode = 1;
+                        }
+                        else
+                        {
+                            this._choice.ModifyMode = 0;
+                        }
+                        this._choice.SecrecyMode = 0;
+                        this._choice.Options = CAjustes.numero_opciones;
+                        this._choice.OptionalN = 1;
+                        this._choice.StartMode = 1;
+
+                        if (this._choice.Start() == "0")
+                        {
+                            Console.WriteLine("Votación números iniciada correctamente");
+                        }
+                        break;
+
+
+                    case 1: // Letras
+                        if (this._choice == null)
+                        {
+                            this._choice = new Choices();
+                            _choice.KeyStatus += new IChoicesEvents_KeyStatusEventHandler(keyStatus);
+                        }
+
+                        //this._choice.BaseConnection = ((FormPpal)(this.Parent.Parent)).getBase();
+
+                        this._choice.OptionsMode = 0;
+
+                        if (CAjustes.permitir_cambio_respuesta)
+                        {
+                            this._choice.ModifyMode = 1;
+                        }
+                        else
+                        {
+                            this._choice.ModifyMode = 0;
+                        }
+                        this._choice.SecrecyMode = 0;
+                        this._choice.Options = CAjustes.numero_opciones;
+                        this._choice.OptionalN = 1;
+                        this._choice.StartMode = 1;
+
+
+                        if (this._choice.Start() == "0")
+                        {
+                            Console.WriteLine("Votación letras iniciada correctamente");
+                        }
+                        break;
+
+
+
+                    case 2: // V/F
+                        if (this._truefalse == null)
+                        {
+                            this._truefalse = new TrueFalse();
+                            this._truefalse.KeyStatus += new ITrueFalseEvents_KeyStatusEventHandler(keyStatus);
+                        }
+                        //this._truefalse.BaseConnection = ((FormPpal)(this.Parent.Parent)).getBase();
+                        this._truefalse.Mode = 1;
+                        if (CAjustes.permitir_cambio_respuesta)
+                        {
+                            this._truefalse.ModifyMode = 1;
+                        }
+                        else
+                        {
+                            this._truefalse.ModifyMode = 0;
+                        }
+                        this._truefalse.SecrecyMode = 0;
+
+                        if (this._truefalse.Start() == "0")
+                        {
+                            Console.WriteLine("Votación Ferdadero/falso iniciada correctamente");
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine("Default case");
+                        break;
+                }
+
+                if (CAjustes.comBaseChanel != 0)
+                {
+                    //this.aleatorio = new Thread(modoAleatorio);
+                    //this.aleatorio.Start();
+                }
+
+                // Arranco la cuenta atrás
+                this.cuentaAtras = new Thread(inicia_cuenta_atras);
+                cuentaAtras.Start();
+            }
+        }
+
+        private void label_recuento_Click(object sender, EventArgs e)
+        {
+            if (this.tipoRecuento == 0)
+            {
+                this.tipoRecuento = 1;
+            }
+            else
+            {
+                this.tipoRecuento = 0;
+            }
+            communicatorCallBack("UserControlVoting-recuentoClick");
+        }
+
+        public FormResultados getVentanaResultados()
+        {
+            return this.ventanaResultados;
+        }
+        public int getTipoRecuento()
+        {
+            return this.tipoRecuento;
+        }
+
+        public void setRecuento(string value)
+        {
+            this.label_recuento.Text = value;
+        }
+
+        public void setCronoTime(string time)
+        {
+            this.label_contador.Text = time;
+        }
+
+        public void setImageVoteStatus(Image image)
+        {
+            this.panel_indicador_estado.BackgroundImage = image;
+        }
+
+        public void inicializarGrafica()
+        {
+            this.chart.Series.Clear();
+            this.chart.Series.Add("Votos");
+            this.chart.ChartAreas["ChartArea1"].AxisX.MajorGrid.LineWidth = 0;
+            this.chart.Series["Votos"].IsValueShownAsLabel = true; // This will display Data Label on the bar.
+            this.chart.Series["Votos"]["LabelStyle"] = "Bottom";  // This will change Label Position
+            this.chart.Series["Votos"].LabelForeColor = Color.White;
+            this.chart.Series["Votos"].Font = new Font("Courier New", 14, FontStyle.Bold);
         }
 
         private void UserControlVoting_Paint(object sender, PaintEventArgs e)
@@ -47,25 +255,13 @@ namespace Votaciones_App.Views
             }
         }
 
-        private void label_recuento_Click(object sender, EventArgs e)
-        {
-            if (this.tipo_recuento == 0)
-            {
-                this.tipo_recuento = 1;
 
-            }
-            else
-            {
-                this.tipo_recuento = 0;
-            }
-            actualiza_recuento();
-        }
 
         public void actualiza_recuento()
         {
             try
             {
-                if (this.tipo_recuento == 0)
+                if (this.tipoRecuento == 0)
                 {
                     double porcentaje = Convert.ToDouble(Decimal.Divide(recuenta_votados(), CAjustes.num_mandos)) * 100;
                     this.label_recuento.Text = Math.Round(porcentaje, 2) + "%";
@@ -89,10 +285,10 @@ namespace Votaciones_App.Views
             for (int i = 0; i < CAjustes.num_mandos; i++)
             {
 
-                if (((FormPpal)(this.Parent.Parent)).getMandos()[i].respondido)
-                {
-                    contador++;
-                }
+                //if (((FormPpal)(this.Parent.Parent)).getMandos()[i].respondido)
+                //{
+                //    contador++;
+                //}
             }
             return contador;
         }
@@ -149,22 +345,22 @@ namespace Votaciones_App.Views
                 // Se permite cambiar la respuesta
                 if (CAjustes.permitir_cambio_respuesta)
                 {
-                    ((FormPpal)(this.Parent.Parent)).getMandoByID(id_mando).respondido = true;
-                    ((FormPpal)(this.Parent.Parent)).getMandoByID(id_mando).respuesta = valor;
+                    //((FormPpal)(this.Parent.Parent)).getMandoByID(id_mando).respondido = true;
+                    //((FormPpal)(this.Parent.Parent)).getMandoByID(id_mando).respuesta = valor;
 
                 }
                 else // No se puede cambiar la respuesta
                 {
-                    if (!((FormPpal)(this.Parent.Parent)).getMandoByID(id_mando).respondido)
-                    {
-                        ((FormPpal)(this.Parent.Parent)).getMandoByID(id_mando).respondido = true;
-                        ((FormPpal)(this.Parent.Parent)).getMandoByID(id_mando).respuesta = valor;
-                    }
+                    //if (!((FormPpal)(this.Parent.Parent)).getMandoByID(id_mando).respondido)
+                    //{
+                    //    ((FormPpal)(this.Parent.Parent)).getMandoByID(id_mando).respondido = true;
+                    //    ((FormPpal)(this.Parent.Parent)).getMandoByID(id_mando).respuesta = valor;
+                    //}
                 }
 
 
                 // Actualizo la informacion
-                this.ventana_resultados.actualizar_grid(((FormPpal)(this.Parent.Parent)).getMandos());
+                //this.ventanaResultados.actualizar_grid(((FormPpal)(this.Parent.Parent)).getMandos());
                 actualiza_recuento();
                 actualiza_grafico();
                 guarda_resultados_csv();
@@ -177,7 +373,7 @@ namespace Votaciones_App.Views
             string resultados = "Tiempo de votacion: " + tiempo + " s\n";
             for (int i = 0; i < CAjustes.num_mandos; i++)
             {
-                resultados = resultados + (i +  ";" + ((FormPpal)(this.Parent.Parent)).getMandos()[i].respuesta + "\n");
+                //resultados = resultados + (i + ";" + ((FormPpal)(this.Parent.Parent)).getMandos()[i].respuesta + "\n");
             }
             this._ficherocsv.EscribeFichero(CAjustes.ruta_resultados + "Resultados.csv", false, resultados);
         }
@@ -186,7 +382,7 @@ namespace Votaciones_App.Views
         string[] array_numeros = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
         private void actualiza_grafico()
         {
-            inicializa_graficos();
+            inicializarGrafica();
 
 
             int[] contador = new int[CAjustes.numero_opciones];
@@ -199,14 +395,14 @@ namespace Votaciones_App.Views
                     // recuenta
                     for (int j = 0; j < CAjustes.num_mandos; j++)
                     {
-                        if (((FormPpal)(this.Parent.Parent)).getMandos()[j].respuesta == this.array_numeros[i])
-                        {
-                            contador[i]++;
-                        }
+                        //if (((FormPpal)(this.Parent.Parent)).getMandos()[j].respuesta == this.array_numeros[i])
+                        //{
+                        //    contador[i]++;
+                        //}
                     }
 
-                    chart1.Series["Votos"].Points.AddXY(array_numeros[i], contador[i]);
-                    chart1.Refresh();
+                    chart.Series["Votos"].Points.AddXY(array_numeros[i], contador[i]);
+                    chart.Refresh();
                 }
             }
 
@@ -218,13 +414,13 @@ namespace Votaciones_App.Views
                 {
                     for (int j = 0; j < CAjustes.num_mandos; j++)
                     {
-                        if (((FormPpal)(this.Parent.Parent)).getMandos()[j].respuesta == array_letras[i])
-                        {
-                            contador[i]++;
-                        }
+                        //if (((FormPpal)(this.Parent.Parent)).getMandos()[j].respuesta == array_letras[i])
+                        //{
+                        //    contador[i]++;
+                        //}
                     }
-                    chart1.Series["Votos"].Points.AddXY(array_letras[i], contador[i]);
-                    chart1.Refresh();
+                    chart.Series["Votos"].Points.AddXY(array_letras[i], contador[i]);
+                    chart.Refresh();
                 }
             }
 
@@ -276,9 +472,9 @@ namespace Votaciones_App.Views
                 for (int i = 0; i < CAjustes.numero_opciones; i++)
                 {
                     if (i == indice_ganador)
-                        this.chart1.Series["Votos"].Points[i].Color = Color.LightGreen;
+                        this.chart.Series["Votos"].Points[i].Color = Color.LightGreen;
                     else
-                        this.chart1.Series["Votos"].Points[i].Color = Color.Tomato;
+                        this.chart.Series["Votos"].Points[i].Color = Color.Tomato;
                 }
             }
         }
@@ -305,7 +501,7 @@ namespace Votaciones_App.Views
                 {
                     return true;
                 }
-         
+
             }
 
             return false;
@@ -313,142 +509,7 @@ namespace Votaciones_App.Views
 
         Choices _choice;
         TrueFalse _truefalse;
-        private void panel_play_Click(object sender, EventArgs e)
-        {
 
-            if (!this.voting)
-            {
-                this.voting = true;
-
-                ((FormPpal)(this.Parent.Parent)).reset_votacion();
-                this.ventana_resultados.inicializa_grid();
-                this.panel_indicador_estado.BackgroundImage = Votaciones_App.Properties.Resources.verde;
-                if (CAjustes.tipo_votacion == 2)
-                {
-                    this.recuenta_opciones = new int[2];
-                }
-                else
-                {
-                    this.recuenta_opciones = new int[CAjustes.numero_opciones];
-                }
-
-                inicializa_graficos();
-
-                if (CAjustes.conexion_grafismo)
-                {
-                    envia_mensaje_progamaExterno("Play");
-                }
-
-
-
-                // Arranca el programa
-                switch (CAjustes.tipo_votacion)
-                {
-                    case 0: // Numeros
-                        if (this._choice == null)
-                        {
-                            this._choice = new Choices();
-                            _choice.KeyStatus += new IChoicesEvents_KeyStatusEventHandler(keyStatus);
-                        }
-
-
-                        this._choice.BaseConnection = ((FormPpal)(this.Parent.Parent)).getBase();
-
-                        this._choice.OptionsMode = 1;
-
-                        if (CAjustes.permitir_cambio_respuesta)
-                        {
-                            this._choice.ModifyMode = 1;
-                        }
-                        else
-                        {
-                            this._choice.ModifyMode = 0;
-                        }
-                        this._choice.SecrecyMode = 0;
-                        this._choice.Options = CAjustes.numero_opciones;
-                        this._choice.OptionalN = 1;
-                        this._choice.StartMode = 1;
-
-                        if (this._choice.Start() == "0")
-                        {
-                            Console.WriteLine("Votación números iniciada correctamente");
-                        }
-                        break;
-
-
-                    case 1: // Letras
-                        if (this._choice == null)
-                        {
-                            this._choice = new Choices();
-                            _choice.KeyStatus += new IChoicesEvents_KeyStatusEventHandler(keyStatus);
-                        }
-
-                        this._choice.BaseConnection = ((FormPpal)(this.Parent.Parent)).getBase();
-
-                        this._choice.OptionsMode = 0;
-
-                        if (CAjustes.permitir_cambio_respuesta)
-                        {
-                            this._choice.ModifyMode = 1;
-                        }
-                        else
-                        {
-                            this._choice.ModifyMode = 0;
-                        }
-                        this._choice.SecrecyMode = 0;
-                        this._choice.Options = CAjustes.numero_opciones;
-                        this._choice.OptionalN = 1;
-                        this._choice.StartMode = 1;
-
-
-                        if (this._choice.Start() == "0")
-                        {
-                            Console.WriteLine("Votación letras iniciada correctamente");
-                        }
-                        break;
-
-
-
-                    case 2: // V/F
-                        if (this._truefalse == null)
-                        {
-                            this._truefalse = new TrueFalse();
-                            this._truefalse.KeyStatus += new ITrueFalseEvents_KeyStatusEventHandler(keyStatus);
-                        }
-                        this._truefalse.BaseConnection = ((FormPpal)(this.Parent.Parent)).getBase();
-                        this._truefalse.Mode = 1;
-                        if (CAjustes.permitir_cambio_respuesta)
-                        {
-                            this._truefalse.ModifyMode = 1;
-                        }
-                        else
-                        {
-                            this._truefalse.ModifyMode = 0;
-                        }
-                        this._truefalse.SecrecyMode = 0;
-
-                        if (this._truefalse.Start() == "0")
-                        {
-                            Console.WriteLine("Votación Ferdadero/falso iniciada correctamente");
-                        }
-                        break;
-
-                    default:
-                        Console.WriteLine("Default case");
-                        break;
-                }
-
-                if (CAjustes.comBaseChanel != 0)
-                {
-                    //this.aleatorio = new Thread(modoAleatorio);
-                    //this.aleatorio.Start();
-                }
-
-                // Arranco la cuenta atrás
-                this.cuentaAtras = new Thread(inicia_cuenta_atras);
-                cuentaAtras.Start();
-            }
-        }
 
         private void inicia_cuenta_atras()
         {
@@ -539,16 +600,7 @@ namespace Votaciones_App.Views
         }
         Thread cuentaAtras;
         Thread aleatorio;
-        private void inicializa_graficos()
-        {
-            this.chart1.Series.Clear();
-            this.chart1.Series.Add("Votos");
-            this.chart1.ChartAreas["ChartArea1"].AxisX.MajorGrid.LineWidth = 0;
-            this.chart1.Series["Votos"].IsValueShownAsLabel = true; // This will display Data Label on the bar.
-            this.chart1.Series["Votos"]["LabelStyle"] = "Bottom";  // This will change Label Position
-            this.chart1.Series["Votos"].LabelForeColor = Color.White;
-            this.chart1.Series["Votos"].Font = new Font("Courier New", 14, FontStyle.Bold);
-        }
+
         public void envia_mensaje_progamaExterno(string instruccion)
         {
 
@@ -572,25 +624,7 @@ namespace Votaciones_App.Views
             }
         }
 
-        private void UserControlVoting_Load(object sender, EventArgs e)
-        {
-            this.ventana_resultados = new FormResultados(new Point(this.Left + this.Width, this.Top));
-            this.estado_conexion_grafismo = 0;
-            if (CAjustes.conexion_grafismo)
-            {
-                // Cliente
-                if (conecta_cliente())
-                {
 
-                    this.estado_conexion_grafismo = 1;
-                }
-                else
-                {
-                    this.estado_conexion_grafismo = 1;
-                    inicia_reconexion_cliente();
-                }
-            }
-        }
 
         public bool conecta_cliente()
         {

@@ -472,6 +472,7 @@ namespace Votaciones_App.Views
             this.button_ajustes_aceptar.BackColor = System.Drawing.Color.Transparent;
             this.button_ajustes_aceptar.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button_ajustes_aceptar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button_ajustes_aceptar.Enabled = false;
             this.button_ajustes_aceptar.Location = new System.Drawing.Point(791, 211);
             this.button_ajustes_aceptar.Margin = new System.Windows.Forms.Padding(4);
             this.button_ajustes_aceptar.Name = "button_ajustes_aceptar";

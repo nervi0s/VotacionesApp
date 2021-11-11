@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Votaciones_App.Formularios
@@ -126,6 +127,25 @@ namespace Votaciones_App.Formularios
             int numeroSuperior = int.Parse(range[1]);
 
             return numeroSuperior - numeroInferior + 1;
+        }
+
+        public static List<int> createIDsList()
+        {
+            string[] ranges = CAjustes.rangos.Split(',');
+            List<int> ids = new List<int>();
+
+            foreach (string range in ranges)
+            {
+                string[] twoValues = range.Split('-');
+                int numeroInferior = int.Parse(twoValues[0]);
+                int numeroSuperior = int.Parse(twoValues[1]);
+
+                for (int i = numeroInferior; i <= numeroSuperior; i++)
+                {
+                    ids.Add(i);
+                }
+            }
+            return ids;
         }
     }
 }
