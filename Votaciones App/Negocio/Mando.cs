@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Votaciones_App
 {
     public class Mando
     {
+        public static int NUMERO_OPCIONES_MAXIMAS = 3;
+
+        private int id;
+        public int cantidadRespuestas;
         public bool respondido;
-        public string respuesta;
-        public int id;
+        public string respuesta = string.Empty;
 
         public Mando(int id)
         {
             this.id = id;
             respondido = false;
             respuesta = "";
-        }       
+        }
 
         public int getID()
         {

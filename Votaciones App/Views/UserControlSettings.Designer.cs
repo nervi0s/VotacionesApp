@@ -70,6 +70,9 @@ namespace Votaciones_App.Views
             this.panel_indicador_conex_base = new System.Windows.Forms.Panel();
             this.panel13 = new System.Windows.Forms.Panel();
             this.panel_info = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.numericUpDown_max_op = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
             this.panel_ajustes.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -84,6 +87,8 @@ namespace Votaciones_App.Views
             this.tableLayoutPanel1.SuspendLayout();
             this.panel14.SuspendLayout();
             this.panel13.SuspendLayout();
+            this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_max_op)).BeginInit();
             this.SuspendLayout();
             // 
             // panel_ajustes
@@ -146,6 +151,7 @@ namespace Votaciones_App.Views
             // 
             this.groupBox1.AutoSize = true;
             this.tableLayoutPanel3.SetColumnSpan(this.groupBox1, 2);
+            this.groupBox1.Controls.Add(this.panel3);
             this.groupBox1.Controls.Add(this.label_base_id);
             this.groupBox1.Controls.Add(this.button_mandos);
             this.groupBox1.Controls.Add(this.label8);
@@ -178,7 +184,7 @@ namespace Votaciones_App.Views
             // label_base_id
             // 
             this.label_base_id.AutoSize = true;
-            this.label_base_id.Location = new System.Drawing.Point(436, 23);
+            this.label_base_id.Location = new System.Drawing.Point(396, 23);
             this.label_base_id.Name = "label_base_id";
             this.label_base_id.Size = new System.Drawing.Size(18, 13);
             this.label_base_id.TabIndex = 31;
@@ -198,7 +204,7 @@ namespace Votaciones_App.Views
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(352, 23);
+            this.label8.Location = new System.Drawing.Point(312, 23);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(68, 13);
@@ -288,7 +294,7 @@ namespace Votaciones_App.Views
             // 
             this.panel_ajustes_num_opciones.Controls.Add(this.numericUpDown_ajustes_num_opciones);
             this.panel_ajustes_num_opciones.Controls.Add(this.label5);
-            this.panel_ajustes_num_opciones.Location = new System.Drawing.Point(542, 72);
+            this.panel_ajustes_num_opciones.Location = new System.Drawing.Point(433, 68);
             this.panel_ajustes_num_opciones.Name = "panel_ajustes_num_opciones";
             this.panel_ajustes_num_opciones.Size = new System.Drawing.Size(238, 33);
             this.panel_ajustes_num_opciones.TabIndex = 19;
@@ -426,7 +432,7 @@ namespace Votaciones_App.Views
             // 
             // numericUpDown_ajustes_tiempo_crono
             // 
-            this.numericUpDown_ajustes_tiempo_crono.Location = new System.Drawing.Point(700, 24);
+            this.numericUpDown_ajustes_tiempo_crono.Location = new System.Drawing.Point(591, 24);
             this.numericUpDown_ajustes_tiempo_crono.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDown_ajustes_tiempo_crono.Maximum = new decimal(new int[] {
             1000,
@@ -450,7 +456,7 @@ namespace Votaciones_App.Views
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(542, 24);
+            this.label2.Location = new System.Drawing.Point(433, 24);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(98, 13);
@@ -569,6 +575,49 @@ namespace Votaciones_App.Views
             this.panel_info.Size = new System.Drawing.Size(24, 24);
             this.panel_info.TabIndex = 4;
             // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.numericUpDown_max_op);
+            this.panel3.Controls.Add(this.label7);
+            this.panel3.Location = new System.Drawing.Point(693, 68);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(97, 33);
+            this.panel3.TabIndex = 20;
+            // 
+            // numericUpDown_max_op
+            // 
+            this.numericUpDown_max_op.Location = new System.Drawing.Point(62, 9);
+            this.numericUpDown_max_op.Margin = new System.Windows.Forms.Padding(4);
+            this.numericUpDown_max_op.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown_max_op.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown_max_op.Name = "numericUpDown_max_op";
+            this.numericUpDown_max_op.Size = new System.Drawing.Size(33, 20);
+            this.numericUpDown_max_op.TabIndex = 19;
+            this.numericUpDown_max_op.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown_max_op.ValueChanged += new System.EventHandler(this.numericUpDown_max_op_ValueChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(4, 10);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(49, 13);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "Op. max:";
+            // 
             // UserControlSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -601,6 +650,9 @@ namespace Votaciones_App.Views
             this.tableLayoutPanel1.PerformLayout();
             this.panel14.ResumeLayout(false);
             this.panel13.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_max_op)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -648,5 +700,8 @@ namespace Votaciones_App.Views
         private System.Windows.Forms.Panel panel_info;
         private System.Windows.Forms.Button button_mandos;
         private System.Windows.Forms.Label label_base_id;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.NumericUpDown numericUpDown_max_op;
+        private System.Windows.Forms.Label label7;
     }
 }

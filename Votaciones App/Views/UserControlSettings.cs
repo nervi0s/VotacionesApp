@@ -51,6 +51,10 @@ namespace Votaciones_App.Views
         private void comboBox_ajustes_tipo_votacion_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.panel_ajustes_num_opciones.Visible = this.comboBox_ajustes_tipo_votacion.SelectedIndex != 2;
+            if (!this.panel_ajustes_num_opciones.Visible)
+            {
+                this.numericUpDown_ajustes_num_opciones.Value = 2;
+            }
         }
 
         private void button_mandos_Click(object sender, EventArgs e)
@@ -124,6 +128,14 @@ namespace Votaciones_App.Views
                 this.radioButton_ajustes_conexion_grafismo_No.Checked = true;
                 this.textBox_ip.Text = "127.0.0.1";
             }
+
+            // Comprobar si se ha elejido el multichoise cuando se arrancó la aplicación
+            if (CAjustes.permitir_multichoice)
+            {
+                this.radioButton_ajustes_cambiar_resp_Si.Enabled = false;
+                this.radioButton_ajustes_cambiar_resp_No.Enabled = false;
+                Mando.NUMERO_OPCIONES_MAXIMAS = (int)this.numericUpDown_max_op.Value; 
+            }
         }
 
         private bool validaAjustesFicheroXml()
@@ -194,6 +206,11 @@ namespace Votaciones_App.Views
         public void setEnableButtonAceptar(bool value)
         {
             this.button_ajustes_aceptar.Enabled = value;
+        }
+
+        private void numericUpDown_max_op_ValueChanged(object sender, EventArgs e)
+        {
+            Mando.NUMERO_OPCIONES_MAXIMAS = (int)this.numericUpDown_max_op.Value;
         }
     }
 }

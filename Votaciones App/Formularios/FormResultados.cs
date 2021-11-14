@@ -29,8 +29,6 @@ namespace Votaciones_App
                    
         }
 
-        
-
         public void actualizar_grid(List<Mando> lista_mandos)
         {
             
@@ -51,6 +49,12 @@ namespace Votaciones_App
 
         private void FormResultados_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Consume the close event
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
         }
 
 

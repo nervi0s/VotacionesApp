@@ -195,6 +195,7 @@ namespace Votaciones_App.Views
             this.panel_stop.Name = "panel_stop";
             this.panel_stop.Size = new System.Drawing.Size(24, 24);
             this.panel_stop.TabIndex = 2;
+            this.panel_stop.Click += new System.EventHandler(this.panel_stop_Click);
             // 
             // panel_play
             // 
@@ -246,6 +247,7 @@ namespace Votaciones_App.Views
             this.panel_abre_lista.Name = "panel_abre_lista";
             this.panel_abre_lista.Size = new System.Drawing.Size(24, 24);
             this.panel_abre_lista.TabIndex = 3;
+            this.panel_abre_lista.Click += new System.EventHandler(this.panel_abre_lista_Click);
             // 
             // panel6
             // 
