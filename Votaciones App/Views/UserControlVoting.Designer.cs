@@ -275,6 +275,7 @@ namespace Votaciones_App.Views
             this.button_apagar_mandos.Size = new System.Drawing.Size(24, 24);
             this.button_apagar_mandos.TabIndex = 3;
             this.button_apagar_mandos.UseVisualStyleBackColor = false;
+            this.button_apagar_mandos.Click += new System.EventHandler(this.button_apagar_mandos_Click);
             // 
             // panel_go_ajustes
             // 
@@ -348,7 +349,6 @@ namespace Votaciones_App.Views
             this.Name = "UserControlVoting";
             this.Size = new System.Drawing.Size(1006, 418);
             this.Load += new System.EventHandler(this.UserControlVoting_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.UserControlVoting_Paint);
             this.panel_base.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.panel3.ResumeLayout(false);

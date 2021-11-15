@@ -1,14 +1,13 @@
 ﻿using SunVote;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using Votaciones_App.Formularios;
 using Votaciones_App.Views;
 
 namespace Votaciones_App.Negocio
 {
+    // Clase encargada de manejar las instancias y los métodos de los objetos necesarios para realizar una votación
     class VoteManager
     {
         public delegate void CommunicatorDelegate(int stateMessage);
@@ -34,6 +33,7 @@ namespace Votaciones_App.Negocio
 
         private Thread cuentaAtrasThread;
 
+        // ##############   Constructor  ############## \\
         public VoteManager(int baseID, int connectionMode)
         {
             this.baseID = baseID;
@@ -50,64 +50,17 @@ namespace Votaciones_App.Negocio
             this.baseConn.BaseOnLine += new IBaseConnectionEvents_BaseOnLineEventHandler(baseConn_BaseOnline);
         }
 
-        private void baseConn_BaseOnline(int baseID, int baseState)
-        {
-            string sState = string.Empty;
-            string sMsg = string.Empty;
-
-            try
-            {
-                switch (baseState)
-                {
-                    case 0:
-                        sState = "Fallo de conexión con el host o conexion finalizada";
-                        break;
-                    case 1:
-                        sState = "Conexión con la base exitosa";
-                        this.keypadManage = new KeypadManage();
-                        this.keypadManage.BaseConnection = this.baseConn;
-                        this.baseManage = new BaseManage();
-                        this.baseManage.BaseConnection = this.baseConn;
-                        this.baseManage.SetBasicFeature(baseID, 0, 0, 0, 0, CAjustes.permitir_multichoice ? 0 : 1);
-                        break;
-                    case -1:
-                        sState = "No puede soportarse este tipo de conexión";
-                        break;
-                    case -2:
-                        sState = "No se encuentra la base";
-                        break;
-                    case -3:
-                        sState = "Error del puerto";
-                        break;
-                    case -4:
-                        sState = "la conexión ha sido cerrada";
-                        break;
-                }
-
-                this.communicatorCallBack(baseState); // Comunicación al Form Principal
-
-                sMsg = "baseConn_BaseOnLine: " + "BaseID= " + baseID + ", BaseState= " + baseState + "  " + sState;
-                Console.WriteLine(sMsg);
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.ToString());
-            }
-        }
-
+        // ##############   Public functions   ############## \\
         public void connectToAntena()
         {
             this.baseConn.Open(this.connectionMode, this.baseID.ToString());
         }
 
-        public BaseConnection getBaseConnection()
-        {
-            return this.baseConn;
-        }
         public void setVotingPanel(UserControlVoting votingPanel)
         {
             this.votingPanel = votingPanel;
         }
+
         public bool isVoting()
         {
             return this.voteActive;
@@ -199,76 +152,57 @@ namespace Votaciones_App.Negocio
             }
         }
 
-        public int recuentaVotados()
+        public void apagarMandos()
         {
-            int contador = 0;
-
-            foreach (Mando mando in this.listaMandos)
-            {
-                if (mando.respondido)
-                    contador++;
-            }
-
-            return contador;
+            this.keypadManage.RemoteOff(0);
         }
 
-        public void iniciarCuentaAtras()
-        {
-            this.cuentaAtrasThread = new Thread(cuentaRegresiva);
-            this.cuentaAtrasThread.Start();
-        }
 
-        public void finalizarCuentaAtras()
-        {
-            if (this.cuentaAtrasThread != null && this.cuentaAtrasThread.IsAlive)
-            {
-                this.cuentaAtrasThread.Abort();
-            }
-        }
+        // ##############   Private functions   ############## \\
 
-        private void cuentaRegresiva()
+        // Evento que maneja las llamadas del objeto que se representa a la Antena
+        private void baseConn_BaseOnline(int baseID, int baseState)
         {
-            while (int.Parse(this.votingPanel.getCronoTime()) > 0)
+            string sState = string.Empty;
+            string sMsg = string.Empty;
+
+            try
             {
-                int cuenta = int.Parse(this.votingPanel.getCronoTime());
-                Thread.Sleep(1000);
-                cuenta--;
-                this.votingPanel.Invoke(new EventHandler(delegate
+                switch (baseState)
                 {
-                    this.votingPanel.setCronoTime(cuenta.ToString());
-
-                }));
-
-                if (cuenta == 0)
-                {
-                    finalizarVotacion();
+                    case 0:
+                        sState = "Fallo de conexión con el host o conexion finalizada";
+                        break;
+                    case 1:
+                        sState = "Conexión con la base exitosa";
+                        this.keypadManage = new KeypadManage();
+                        this.keypadManage.BaseConnection = this.baseConn;
+                        this.baseManage = new BaseManage();
+                        this.baseManage.BaseConnection = this.baseConn;
+                        this.baseManage.SetBasicFeature(baseID, 0, 0, 0, 0, CAjustes.permitir_multichoice ? 0 : 1);
+                        break;
+                    case -1:
+                        sState = "No puede soportarse este tipo de conexión";
+                        break;
+                    case -2:
+                        sState = "No se encuentra la base";
+                        break;
+                    case -3:
+                        sState = "Error del puerto";
+                        break;
+                    case -4:
+                        sState = "la conexión ha sido cerrada";
+                        break;
                 }
 
-            }
-        }
+                this.communicatorCallBack(baseState); // Comunicación al Form Principal
 
-        private void getConfigAndStopVotes()
-        {
-            switch (CAjustes.tipo_votacion)
+                sMsg = "baseConn_BaseOnLine: " + "BaseID= " + baseID + ", BaseState= " + baseState + "  " + sState;
+                Console.WriteLine(sMsg);
+            }
+            catch (Exception ex)
             {
-                case 0: // Votación de números
-                    if (this.choice != null)
-                    {
-                        Console.WriteLine("Votación números fin: " + this.choice.Stop());
-                    }
-                    break;
-                case 1: // Votación de letras
-                    if (this.choice != null)
-                    {
-                        Console.WriteLine("Votación letras fin: " + this.choice.Stop());
-                    }
-                    break;
-                case 2: // Votación de Verdadero o Falso
-                    if (this.trueFalse != null)
-                    {
-                        Console.WriteLine("Votación verdadero/falso fin: " + this.trueFalse.Stop());
-                    }
-                    break;
+                System.Windows.Forms.MessageBox.Show(ex.ToString());
             }
         }
 
@@ -336,6 +270,31 @@ namespace Votaciones_App.Negocio
             }
         }
 
+        private void getConfigAndStopVotes()
+        {
+            switch (CAjustes.tipo_votacion)
+            {
+                case 0: // Votación de números
+                    if (this.choice != null)
+                    {
+                        Console.WriteLine("Votación números fin: " + this.choice.Stop());
+                    }
+                    break;
+                case 1: // Votación de letras
+                    if (this.choice != null)
+                    {
+                        Console.WriteLine("Votación letras fin: " + this.choice.Stop());
+                    }
+                    break;
+                case 2: // Votación de Verdadero o Falso
+                    if (this.trueFalse != null)
+                    {
+                        Console.WriteLine("Votación verdadero/falso fin: " + this.trueFalse.Stop());
+                    }
+                    break;
+            }
+        }
+
         // Método llamado cuando se detecta una pulsación de un mando de votación
         private void onKeyRemotePressedDetected(string id_base, int id_mando, string valor, double tiempo_respuesta)
         {
@@ -357,15 +316,14 @@ namespace Votaciones_App.Negocio
                     if (getMandoById(id_mando).cantidadRespuestas < Mando.NUMERO_OPCIONES_MAXIMAS)
                     {
                         getMandoById(id_mando).respondido = true;
-                        getMandoById(id_mando).respuesta += valor + ";";
+                        getMandoById(id_mando).respuesta += ";" + valor;
                         getMandoById(id_mando).cantidadRespuestas++;
-                        Mando m = getMandoById(id_mando);
                     }
                 }
                 else
                 {
                     getMandoById(id_mando).respondido = true;
-                    getMandoById(id_mando).respuesta = valor;
+                    getMandoById(id_mando).respuesta = ";" + valor;
                 }
             }
             else
@@ -373,7 +331,7 @@ namespace Votaciones_App.Negocio
                 if (!getMandoById(id_mando).respondido)
                 {
                     getMandoById(id_mando).respondido = true;
-                    getMandoById(id_mando).respuesta = valor;
+                    getMandoById(id_mando).respuesta = ";" + valor;
                 }
             }
 
@@ -388,7 +346,43 @@ namespace Votaciones_App.Negocio
             guardarResultadosCSV();
         }
 
-        public void actualizarGrafico()
+
+        // ##############   Auxiliary private functions   ############## \\
+        private void iniciarCuentaAtras()
+        {
+            this.cuentaAtrasThread = new Thread(cuentaRegresiva);
+            this.cuentaAtrasThread.Start();
+        }
+
+        private void finalizarCuentaAtras()
+        {
+            if (this.cuentaAtrasThread != null && this.cuentaAtrasThread.IsAlive)
+            {
+                this.cuentaAtrasThread.Abort();
+            }
+        }
+
+        private void cuentaRegresiva()
+        {
+            while (int.Parse(this.votingPanel.getCronoTime()) > 0)
+            {
+                int cuenta = int.Parse(this.votingPanel.getCronoTime());
+                Thread.Sleep(1000);
+                cuenta--;
+                this.votingPanel.Invoke(new EventHandler(delegate
+                {
+                    this.votingPanel.setCronoTime(cuenta.ToString());
+
+                }));
+
+                if (cuenta == 0)
+                {
+                    finalizarVotacion();
+                }
+            }
+        }
+
+        private void actualizarGrafico()
         {
             this.votingPanel.actualizarGrafica(this.listaMandos, recuentaVotados());
         }
@@ -400,7 +394,7 @@ namespace Votaciones_App.Negocio
 
             foreach (Mando mando in this.listaMandos)
             {
-                resultados = resultados + mando.getID() + ";" + mando.respuesta + "\n";
+                resultados = resultados + mando.getID() + mando.respuesta + "\n";
             }
 
             this.ficheroCSV.EscribeFichero(CAjustes.ruta_resultados + "Resultados.csv", false, resultados);
@@ -410,10 +404,10 @@ namespace Votaciones_App.Negocio
         {
             string[] ranges = CAjustes.rangos.Split(',');
             List<List<int>> rangesList = new List<List<int>>();
-            List<int> data = new List<int>();
 
             foreach (string range in ranges)
             {
+                List<int> data = new List<int>();
                 string[] twoValues = range.Split('-');
                 int numeroInferior = int.Parse(twoValues[0]);
                 int numeroSuperior = int.Parse(twoValues[1]);
@@ -462,6 +456,19 @@ namespace Votaciones_App.Negocio
                 default:
                     return "_";
             }
+        }
+
+        private int recuentaVotados()
+        {
+            int contador = 0;
+
+            foreach (Mando mando in this.listaMandos)
+            {
+                if (mando.respondido)
+                    contador++;
+            }
+
+            return contador;
         }
 
         private Mando getMandoById(int id)

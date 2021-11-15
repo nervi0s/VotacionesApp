@@ -4,10 +4,12 @@ using System.IO;
 using System.Collections;
 using Votaciones_App.Views;
 using Votaciones_App.Negocio;
+using System.Drawing;
 
 namespace Votaciones_App
 {
-    public partial class FormPpal : Form
+    // Clase encargada de gestionar los paneles que existen en la aplicación y la comunicación entre ellos
+    public partial class FormPrincipal : Form
     {
         UserControlConnectionChoice connectionChoicePanel;
         UserControlSettings settingsPanel;
@@ -18,7 +20,7 @@ namespace Votaciones_App
         CFileXML xmlFile = new CFileXML();
 
         // ##############   Constructor  ############## \\
-        public FormPpal()
+        public FormPrincipal()
         {
             InitializeComponent();
         }
@@ -45,25 +47,44 @@ namespace Votaciones_App
         // Carga el panel de elección de tipo de conexión
         private void loadConnectionChoisePanel()
         {
+            setFixedWindowSize();
+
             this.connectionChoicePanel = new UserControlConnectionChoice();
             this.connectionChoicePanel.communicatorCallBack += customsViewsCommHandler;
             this.panel_root.Controls.Add(connectionChoicePanel);
         }
 
+        // Elimina el panel de elección de tipo de conexión
+        private void removeConnectionChoicePanel()
+        {
+            this.panel_root.Controls.Remove(this.connectionChoicePanel);
+        }
+
         // Carga el panel de settings
         private void loadSettingsPanel()
         {
+            setFixedWindowSize();
+
             if (this.settingsPanel == null)
             {
                 this.settingsPanel = new UserControlSettings();
                 this.settingsPanel.communicatorCallBack += customsViewsCommHandler;
             }
+
             this.panel_root.Controls.Add(settingsPanel);
+        }
+
+        // Elimina el panel de settings
+        private void removeSettingsPanel()
+        {
+            this.panel_root.Controls.Remove(this.settingsPanel);
         }
 
         // Carga el panel de las votaciones
         private void loadVotingPanel()
         {
+            setCustomWindowSize();
+
             if (this.votingPanel == null)
             {
                 this.votingPanel = new UserControlVoting();
@@ -74,20 +95,11 @@ namespace Votaciones_App
             this.panel_root.Controls.Add(votingPanel);
         }
 
-        private void removeConnectionChoicePanel()
-        {
-            this.panel_root.Controls.Remove(this.connectionChoicePanel);
-
-        }
-        private void removeSettingsPanel()
-        {
-            this.panel_root.Controls.Remove(this.settingsPanel);
-        }
+        // Elimina el panel de las votaciones
         private void removeVotingPanel()
         {
             this.panel_root.Controls.Remove(this.votingPanel);
         }
-
 
         // Maneja las llamadas desde otros paneles
         private void customsViewsCommHandler(string msg)
@@ -110,10 +122,7 @@ namespace Votaciones_App
                 {
                     if (this.voteManager.isVoting())
                         this.voteManager.finalizarVotacion();
-                    //ToDo cambiar entre paneles
-                    //voteMan resetVota
-                    // panelVota tiempoCrono CA
-                    // panelVota rojo
+
                     removeVotingPanel();
                     loadSettingsPanel();
                 }
@@ -130,6 +139,10 @@ namespace Votaciones_App
                     if (this.voteManager.isVoting())
                         this.voteManager.finalizarVotacion();
                 }
+                else if (msg.Contains("apagaMandos"))
+                {
+                    this.voteManager.apagarMandos();
+                }
                 else if (msg.Contains("recuentoClick"))
                 {
                     this.voteManager.actualizarRecuento();
@@ -137,7 +150,7 @@ namespace Votaciones_App
             }
         }
 
-        // Maneja las llamada desde VoteManager
+        // Maneja las llamadas desde VoteManager
         private void voteManagerCommHandler(int status)
         {
             switch (status)
@@ -249,6 +262,22 @@ namespace Votaciones_App
             this.voteManager = new VoteManager(CAjustes.base_antena_id, CAjustes.tipo_conexion);
             this.voteManager.communicatorCallBack += voteManagerCommHandler;
             this.voteManager.connectToAntena();
+        }
+
+        // Establece propiedades de la ventana del FormPrincipal
+        private void setFixedWindowSize()
+        {
+            this.WindowState = FormWindowState.Normal;
+            this.Size = new Size(1109, 454);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+        }
+
+        // Establece propiedades de la ventana del FormPrincipal
+        private void setCustomWindowSize()
+        {
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+            this.MaximizeBox = true;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Votaciones_App
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormPpal());
+            Application.Run(new FormPrincipal());
         }
     }
 }

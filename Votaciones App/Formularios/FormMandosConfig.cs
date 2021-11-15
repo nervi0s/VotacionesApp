@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 namespace Votaciones_App.Formularios
 {
+    // Clase encargada de configurar la cantidad de mandos a usar en una votación y sus rangos
     public partial class FormMandosConfig : Form
     {
         CFileXML xmlFile = new CFileXML();

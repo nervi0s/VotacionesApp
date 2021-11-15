@@ -31,18 +31,18 @@ namespace Votaciones_App.Formularios
         {
             this.panel_base = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.textBox_gateway = new System.Windows.Forms.TextBox();
+            this.textBox_mac = new System.Windows.Forms.TextBox();
+            this.textBox_mask = new System.Windows.Forms.TextBox();
             this.label_gateway = new System.Windows.Forms.Label();
             this.label_mask = new System.Windows.Forms.Label();
             this.label_mac = new System.Windows.Forms.Label();
             this.label_ip = new System.Windows.Forms.Label();
             this.textBox_ip = new System.Windows.Forms.TextBox();
-            this.textBox_mask = new System.Windows.Forms.TextBox();
-            this.textBox_mac = new System.Windows.Forms.TextBox();
-            this.textBox_gateway = new System.Windows.Forms.TextBox();
             this.panel_botton = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.button_aceptar = new System.Windows.Forms.Button();
             this.button_cancelar = new System.Windows.Forms.Button();
+            this.button_aceptar = new System.Windows.Forms.Button();
             this.panel_base.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel_botton.SuspendLayout();
@@ -83,6 +83,30 @@ namespace Votaciones_App.Formularios
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(455, 258);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // textBox_gateway
+            // 
+            this.textBox_gateway.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_gateway.Location = new System.Drawing.Point(154, 168);
+            this.textBox_gateway.Name = "textBox_gateway";
+            this.textBox_gateway.Size = new System.Drawing.Size(298, 20);
+            this.textBox_gateway.TabIndex = 11;
+            // 
+            // textBox_mac
+            // 
+            this.textBox_mac.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_mac.Location = new System.Drawing.Point(154, 66);
+            this.textBox_mac.Name = "textBox_mac";
+            this.textBox_mac.Size = new System.Drawing.Size(298, 20);
+            this.textBox_mac.TabIndex = 10;
+            // 
+            // textBox_mask
+            // 
+            this.textBox_mask.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_mask.Location = new System.Drawing.Point(154, 117);
+            this.textBox_mask.Name = "textBox_mask";
+            this.textBox_mask.Size = new System.Drawing.Size(298, 20);
+            this.textBox_mask.TabIndex = 9;
             // 
             // label_gateway
             // 
@@ -136,30 +160,6 @@ namespace Votaciones_App.Formularios
             this.textBox_ip.Size = new System.Drawing.Size(298, 20);
             this.textBox_ip.TabIndex = 7;
             // 
-            // textBox_mask
-            // 
-            this.textBox_mask.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_mask.Location = new System.Drawing.Point(154, 117);
-            this.textBox_mask.Name = "textBox_mask";
-            this.textBox_mask.Size = new System.Drawing.Size(298, 20);
-            this.textBox_mask.TabIndex = 9;
-            // 
-            // textBox_mac
-            // 
-            this.textBox_mac.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_mac.Location = new System.Drawing.Point(154, 66);
-            this.textBox_mac.Name = "textBox_mac";
-            this.textBox_mac.Size = new System.Drawing.Size(298, 20);
-            this.textBox_mac.TabIndex = 10;
-            // 
-            // textBox_gateway
-            // 
-            this.textBox_gateway.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_gateway.Location = new System.Drawing.Point(154, 168);
-            this.textBox_gateway.Name = "textBox_gateway";
-            this.textBox_gateway.Size = new System.Drawing.Size(298, 20);
-            this.textBox_gateway.TabIndex = 11;
-            // 
             // panel_botton
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.panel_botton, 2);
@@ -186,18 +186,6 @@ namespace Votaciones_App.Formularios
             this.tableLayoutPanel2.Size = new System.Drawing.Size(449, 48);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
-            // button_aceptar
-            // 
-            this.button_aceptar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button_aceptar.Location = new System.Drawing.Point(30, 3);
-            this.button_aceptar.Margin = new System.Windows.Forms.Padding(30, 3, 30, 3);
-            this.button_aceptar.Name = "button_aceptar";
-            this.button_aceptar.Size = new System.Drawing.Size(164, 42);
-            this.button_aceptar.TabIndex = 0;
-            this.button_aceptar.Text = "Aceptar";
-            this.button_aceptar.UseVisualStyleBackColor = true;
-            this.button_aceptar.Click += new System.EventHandler(this.button_aceptar_Click);
-            // 
             // button_cancelar
             // 
             this.button_cancelar.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -209,6 +197,18 @@ namespace Votaciones_App.Formularios
             this.button_cancelar.Text = "Cancelar";
             this.button_cancelar.UseVisualStyleBackColor = true;
             this.button_cancelar.Click += new System.EventHandler(this.button_cancelar_Click);
+            // 
+            // button_aceptar
+            // 
+            this.button_aceptar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button_aceptar.Location = new System.Drawing.Point(30, 3);
+            this.button_aceptar.Margin = new System.Windows.Forms.Padding(30, 3, 30, 3);
+            this.button_aceptar.Name = "button_aceptar";
+            this.button_aceptar.Size = new System.Drawing.Size(164, 42);
+            this.button_aceptar.TabIndex = 0;
+            this.button_aceptar.Text = "Aceptar";
+            this.button_aceptar.UseVisualStyleBackColor = true;
+            this.button_aceptar.Click += new System.EventHandler(this.button_aceptar_Click);
             // 
             // EthernetOptions
             // 

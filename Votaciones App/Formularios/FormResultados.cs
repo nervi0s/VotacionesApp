@@ -1,52 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Threading;
-using System.Collections;
 using Votaciones_App.Formularios;
 
 namespace Votaciones_App
 {
+    // Clase que crea una ventana auxiliar que muestra información de los mandos que votan y sus respuestas
     public partial class FormResultados : Form
     {
+        private bool inicializado = false;
 
-        bool inicializado = false;
-
+        // ##############   Constructor  ############## \\
         public FormResultados(Point location)
         {
             InitializeComponent();
             this.Location = location;
         }
 
-        private void FormResultados_Load(object sender, EventArgs e)
-        {
-                   
-        }
-
-        public void actualizar_grid(List<Mando> lista_mandos)
-        {
-            
-
-            for (int i = 0; i < CAjustes.num_mandos; i++)
-            {
-                try
-                {
-                    this.dataGridView1.Rows[i].Cells[1].Value = lista_mandos[i].respuesta;
-                }
-                catch (Exception e)
-                {
-
-                }
-
-            }
-        }
-
+        // ##############   Event controls   ############## \\
         private void FormResultados_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Consume the close event
@@ -57,29 +29,29 @@ namespace Votaciones_App
             }
         }
 
-
+        // ##############   Public functions   ############## \\
         public void inicializa_grid()
         {
             List<int> ids = FormMandosConfig.createIDsList();
 
-            if (inicializado)
+            if (this.inicializado)
             {
-                for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                for (int i = 0; i < this.dataGridView1.Columns.Count; i++)
                 {
-                    for (int j = 0; j < dataGridView1.Rows.Count; j++)
+                    for (int j = 0; j < this.dataGridView1.Rows.Count; j++)
                     {
-                        dataGridView1.Rows[j].Cells[i].Value = "";
+                        this.dataGridView1.Rows[j].Cells[i].Value = "";
                     }
                 }
-                
-                for (int j = 0; j < dataGridView1.Rows.Count; j++)
+
+                for (int j = 0; j < this.dataGridView1.Rows.Count; j++)
                 {
-                    dataGridView1.Rows[j].Cells[0].Value = ids[j];
+                    this.dataGridView1.Rows[j].Cells[0].Value = ids[j];
                 }
-                dataGridView1.ClearSelection();
+                this.dataGridView1.ClearSelection();
                 return;
             }
-                
+
 
             this.dataGridView1.Columns.Add("Id", "ID");
             this.dataGridView1.Columns["Id"].Width = 50;
@@ -104,18 +76,32 @@ namespace Votaciones_App
                 this.dataGridView1.Rows.Add(ids[i], "");
             }
 
-
             // Pongo de otro color las celdas alternando
-            for (int i = 0; i < dataGridView1.Rows.Count; i++)
+            for (int i = 0; i < this.dataGridView1.Rows.Count; i++)
             {
                 if (i % 2 != 0)
                 {
                     Color color = Color.FromArgb(227, 219, 236);
-                    dataGridView1.Rows[i].DefaultCellStyle.BackColor = color;
+                    this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = color;
                 }
             }
-            dataGridView1.ClearSelection();
-            inicializado = true;
-        } 
+            this.dataGridView1.ClearSelection();
+            this.inicializado = true;
+        }
+
+        public void actualizar_grid(List<Mando> lista_mandos)
+        {
+            for (int i = 0; i < CAjustes.num_mandos; i++)
+            {
+                try
+                {
+                    this.dataGridView1.Rows[i].Cells[1].Value = lista_mandos[i].respuesta.Substring(1);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+        }
     }
 }

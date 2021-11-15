@@ -69,6 +69,25 @@ namespace Votaciones_App.Views
             }
         }
 
+        private void button_ajustes_resultados_path_Click(object sender, EventArgs e)
+        {
+            if (this.folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.textBox_ajustes_resultados_path.Text = this.folderBrowserDialog.SelectedPath + "\\";
+            }
+        }
+        private void button_conf_names_Click(object sender, EventArgs e)
+        {
+            // Abrir formulario de relación de nombres con voto
+            FormNamesBind formNamesBind = new FormNamesBind();
+            formNamesBind.StartPosition = FormStartPosition.CenterParent;
+
+            if (formNamesBind.ShowDialog() == DialogResult.OK)
+            {
+                UserControlVoting.array_nombres = FormNamesBind.names;
+            }
+        }
+
         private void button_ajustes_aceptar_Click(object sender, EventArgs e)
         {
             if (validaAjustesInterfaz())
@@ -134,7 +153,8 @@ namespace Votaciones_App.Views
             {
                 this.radioButton_ajustes_cambiar_resp_Si.Enabled = false;
                 this.radioButton_ajustes_cambiar_resp_No.Enabled = false;
-                Mando.NUMERO_OPCIONES_MAXIMAS = (int)this.numericUpDown_max_op.Value; 
+                this.panel_op_max.Visible = true;
+                Mando.NUMERO_OPCIONES_MAXIMAS = (int)this.numericUpDown_max_op.Value;
             }
         }
 
@@ -197,7 +217,7 @@ namespace Votaciones_App.Views
         }
 
 
-        // ##############   Public events   ############## \\
+        // ##############   Public functions   ############## \\
         public void setImageConnectionStatus(Image image)
         {
             this.panel_indicador_conex_base.BackgroundImage = image;

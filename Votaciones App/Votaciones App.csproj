@@ -83,6 +83,12 @@
     <Compile Include="Formularios\FormMandosConfig.Designer.cs">
       <DependentUpon>FormMandosConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\FormNamesBind.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\FormNamesBind.Designer.cs">
+      <DependentUpon>FormNamesBind.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\FormPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,6 +132,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\FormMandosConfig.resx">
       <DependentUpon>FormMandosConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\FormNamesBind.resx">
+      <DependentUpon>FormNamesBind.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\FormPrincipal.resx">
       <DependentUpon>FormPrincipal.cs</DependentUpon>

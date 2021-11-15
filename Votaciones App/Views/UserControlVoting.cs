@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace Votaciones_App.Views
 {
+    // Clase encargada de mostrar los controles para gestionar la votación y visualizar los datos
     public partial class UserControlVoting : UserControl
     {
         public delegate void CommunicatorDelegate(string msg);
@@ -23,18 +24,21 @@ namespace Votaciones_App.Views
         private Socket socket;
         private Thread reconexion;
 
-        public bool voting { get; set; }
-
+        // ##############   Constructor  ############## \\
         public UserControlVoting()
         {
             InitializeComponent();
-            this.Dock = DockStyle.Fill;
-
-            this.label_contador.Text = CAjustes.tiempo_crono.ToString();
         }
+
+        // ##############   Event controls   ############## \\
         private void UserControlVoting_Load(object sender, EventArgs e)
         {
-            this.ventanaResultados = new FormResultados(new Point(((FormPpal)(this.Parent.Parent)).Left + ((FormPpal)(this.Parent.Parent)).Width, ((FormPpal)(this.Parent.Parent)).Top));
+            this.Dock = DockStyle.Fill; // Dock style
+
+            this.label_contador.Text = CAjustes.tiempo_crono.ToString();
+
+            this.ventanaResultados = new FormResultados(new Point(((FormPrincipal)(this.Parent.Parent)).Left + ((FormPrincipal)(this.Parent.Parent)).Width, ((FormPrincipal)(this.Parent.Parent)).Top));
+
             this.estado_conexion_grafismo = 0;
             if (CAjustes.conexion_grafismo)
             {
@@ -51,24 +55,26 @@ namespace Votaciones_App.Views
             }
         }
 
-        private void panel_abre_lista_Click(object sender, EventArgs e)
-        {
-            this.ventanaResultados.Show();
-            this.ventanaResultados.BringToFront();
-        }
-
         private void panel_go_ajustes_Click(object sender, EventArgs e)
         {
             communicatorCallBack("UserControlVoting-cambiaPanel");
         }
+
+        private void button_apagar_mandos_Click(object sender, EventArgs e)
+        {
+            communicatorCallBack("UserControlVoting-apagaMandos");
+        }
+
         private void panel_play_Click(object sender, EventArgs e)
         {
             communicatorCallBack("UserControlVoting-iniciaVotacion");
         }
+
         private void panel_stop_Click(object sender, EventArgs e)
         {
             communicatorCallBack("UserControlVoting-detieneVotacion");
         }
+
         private void label_recuento_Click(object sender, EventArgs e)
         {
             if (this.tipoRecuento == 0)
@@ -80,10 +86,12 @@ namespace Votaciones_App.Views
             communicatorCallBack("UserControlVoting-recuentoClick");
         }
 
-        public FormResultados getVentanaResultados()
+        private void panel_abre_lista_Click(object sender, EventArgs e)
         {
-            return this.ventanaResultados;
+            this.ventanaResultados.Show();
+            this.ventanaResultados.BringToFront();
         }
+        // ##############   Public events   ############## \\
         public int getTipoRecuento()
         {
             return this.tipoRecuento;
@@ -109,32 +117,26 @@ namespace Votaciones_App.Views
             this.panel_indicador_estado.BackgroundImage = image;
         }
 
+        public FormResultados getVentanaResultados()
+        {
+            return this.ventanaResultados;
+        }
+
         public void inicializarGrafica()
         {
             this.chart.Series.Clear();
             this.chart.Series.Add("Votos");
             this.chart.ChartAreas["ChartArea1"].AxisX.MajorGrid.LineWidth = 0;
+            this.chart.ChartAreas["ChartArea1"].AxisX.Interval = 1; // Show the axis X names in 1 interval
             this.chart.Series["Votos"].IsValueShownAsLabel = true; // This will display Data Label on the bar.
-            this.chart.Series["Votos"]["LabelStyle"] = "Bottom";  // This will change Label Position
-            this.chart.Series["Votos"].LabelForeColor = Color.White;
+            this.chart.Series["Votos"]["LabelStyle"] = "Top";  // This will change Label Position
+            this.chart.Series["Votos"].LabelForeColor = Color.Purple;
             this.chart.Series["Votos"].Font = new Font("Courier New", 14, FontStyle.Bold);
-        }
-
-        private void UserControlVoting_Paint(object sender, PaintEventArgs e)
-        {
-            //this.label_contador.Text = CAjustes.tiempo_crono.ToString();
-            //if (voting)
-            //{
-            //    this.panel_indicador_estado.BackgroundImage = Properties.Resources.verde;
-            //}
-            //else
-            //{
-            //    this.panel_indicador_estado.BackgroundImage = Properties.Resources.rojo;
-            //}
         }
 
         private string[] array_letras = new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
         private string[] array_numeros = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
+        public static string[] array_nombres;
 
         public void actualizarGrafica(List<Mando> listaMandos, int votados)
         {
@@ -155,7 +157,8 @@ namespace Votaciones_App.Views
                         }
                     }
 
-                    chart.Series["Votos"].Points.AddXY(array_numeros[i], contador[i]);
+                    //chart.Series["Votos"].Points.AddXY(array_numeros[i], contador[i]);
+                    chart.Series["Votos"].Points.AddXY(array_nombres == null ? array_numeros[i] : array_nombres[i], contador[i]);
                     chart.Refresh();
                 }
             }
@@ -181,6 +184,39 @@ namespace Votaciones_App.Views
             comprueba_si_hay_ganador(contador, votados);
         }
 
+        public void envia_mensaje_progamaExterno(string instruccion)
+        {
+            if (this.estado_conexion_grafismo == 1)
+            {
+                instruccion = "itemset(\"" + instruccion + "\", \"MAP_EXE\");";
+
+                try
+                {
+                    byte[] strASCII = Encoding.Default.GetBytes(instruccion);
+                    this.socket.Send(strASCII);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("SocketException: {0}", e.Message);
+                    this.estado_conexion_grafismo = 0;
+                    this.reconexion = new Thread(reintenta_reconectar_cliente);
+                    inicia_reconexion_cliente();
+                }
+            }
+        }
+
+        public void termina_reconexion_cliente()
+        {
+            if (this.reconexion != null)
+            {
+                if (this.reconexion.IsAlive)
+                {
+                    this.reconexion.Abort();
+                }
+            }
+        }
+
+        // ##############   Auxiliary private functions   ############## \\
         private void comprueba_si_hay_ganador(int[] contador, int votados)
         {
             int votos_restantes = CAjustes.num_mandos - votados;
@@ -225,28 +261,7 @@ namespace Votaciones_App.Views
             }
         }
 
-        public void envia_mensaje_progamaExterno(string instruccion)
-        {
-            if (this.estado_conexion_grafismo == 1)
-            {
-                instruccion = "itemset(\"" + instruccion + "\", \"MAP_EXE\");";
-
-                try
-                {
-                    byte[] strASCII = Encoding.Default.GetBytes(instruccion);
-                    this.socket.Send(strASCII);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("SocketException: {0}", e.Message);
-                    this.estado_conexion_grafismo = 0;
-                    this.reconexion = new Thread(reintenta_reconectar_cliente);
-                    inicia_reconexion_cliente();
-                }
-            }
-        }
-
-        public bool conecta_cliente()
+        private bool conecta_cliente()
         {
             try
             {
@@ -263,7 +278,7 @@ namespace Votaciones_App.Views
             }
         }
 
-        public void inicia_reconexion_cliente()
+        private void inicia_reconexion_cliente()
         {
             this.reconexion = new Thread(reintenta_reconectar_cliente);
             if (this.reconexion != null)
@@ -294,17 +309,6 @@ namespace Votaciones_App.Views
             // Cuando hay una conexión exitosa se finaliza el hilo creado para ella
             Console.WriteLine("Reintento de conexión realizado con exito");
             termina_reconexion_cliente();
-        }
-
-        public void termina_reconexion_cliente()
-        {
-            if (this.reconexion != null)
-            {
-                if (this.reconexion.IsAlive)
-                {
-                    this.reconexion.Abort();
-                }
-            }
         }
     }
 }
