@@ -95,7 +95,10 @@ namespace Votaciones_App
             {
                 try
                 {
-                    this.dataGridView1.Rows[i].Cells[1].Value = lista_mandos[i].respuesta.Substring(1);
+                    if (lista_mandos[i].respuesta.Length > 1)
+                    {
+                        this.dataGridView1.Rows[i].Cells[1].Value = lista_mandos[i].respuesta.Substring(1);
+                    }
                 }
                 catch (Exception e)
                 {

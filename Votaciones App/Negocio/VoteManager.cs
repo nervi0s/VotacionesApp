@@ -157,7 +157,6 @@ namespace Votaciones_App.Negocio
             this.keypadManage.RemoteOff(0);
         }
 
-
         // ##############   Private functions   ############## \\
 
         // Evento que maneja las llamadas del objeto que se representa a la Antena

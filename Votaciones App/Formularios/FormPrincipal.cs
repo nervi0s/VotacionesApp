@@ -212,6 +212,17 @@ namespace Votaciones_App
                 lista.Add("MacAntena");
                 lista.Add("MaskAntena");
                 lista.Add("GatewayAntena");
+                lista.Add("Nombre1");
+                lista.Add("Nombre2");
+                lista.Add("Nombre3");
+                lista.Add("Nombre4");
+                lista.Add("Nombre5");
+                lista.Add("Nombre6");
+                lista.Add("Nombre7");
+                lista.Add("Nombre8");
+                lista.Add("Nombre9");
+                lista.Add("Nombre10");
+
                 xmlFile.CreaFicheroVacio("Ajustes", lista, CAjustes.ruta_ajustes);
 
                 // Escribe el XML con valores por defecto
@@ -230,6 +241,16 @@ namespace Votaciones_App
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "MacAntena", "74-30-13-02-05-36");
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "MaskAntena", "255.255.255.0");
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "GatewayAntena", "192.168.0.1");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Nombre1", "");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Nombre2", "");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Nombre3", "");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Nombre4", "");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Nombre5", "");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Nombre6", "");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Nombre7", "");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Nombre8", "");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Nombre9", "");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Nombre10", "");
             }
 
             // Se cargan en memoria ajustes básicos

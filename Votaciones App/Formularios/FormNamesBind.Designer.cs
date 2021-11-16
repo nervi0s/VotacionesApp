@@ -351,6 +351,7 @@ namespace Votaciones_App.Formularios
             this.Controls.Add(this.tableLayoutPanel_base);
             this.Name = "FormNamesBind";
             this.Text = "Relación Votos-Nombres";
+            this.Load += new System.EventHandler(this.FormNamesBind_Load);
             this.tableLayoutPanel_base.ResumeLayout(false);
             this.tableLayoutPanel_base.PerformLayout();
             this.panel_botton.ResumeLayout(false);

@@ -127,6 +127,7 @@ namespace Votaciones_App.Views
             this.chart.Series.Clear();
             this.chart.Series.Add("Votos");
             this.chart.ChartAreas["ChartArea1"].AxisX.MajorGrid.LineWidth = 0;
+            this.chart.ChartAreas["ChartArea1"].AxisX.LabelStyle.Font = new Font("Courier New", 14, FontStyle.Bold);
             this.chart.ChartAreas["ChartArea1"].AxisX.Interval = 1; // Show the axis X names in 1 interval
             this.chart.Series["Votos"].IsValueShownAsLabel = true; // This will display Data Label on the bar.
             this.chart.Series["Votos"]["LabelStyle"] = "Top";  // This will change Label Position
@@ -157,7 +158,6 @@ namespace Votaciones_App.Views
                         }
                     }
 
-                    //chart.Series["Votos"].Points.AddXY(array_numeros[i], contador[i]);
                     chart.Series["Votos"].Points.AddXY(array_nombres == null ? array_numeros[i] : array_nombres[i], contador[i]);
                     chart.Refresh();
                 }
