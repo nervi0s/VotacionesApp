@@ -43,7 +43,7 @@
             this.panel_root.Size = new System.Drawing.Size(1093, 415);
             this.panel_root.TabIndex = 0;
             // 
-            // FormPpal
+            // FormPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -54,7 +54,7 @@
             this.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "FormPpal";
+            this.Name = "FormPrincipal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Votaciones App";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormPpal_FormClosed);

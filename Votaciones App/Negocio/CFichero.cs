@@ -107,7 +107,7 @@ namespace Votaciones_App
         {
             // El segundo parametro a "true" indica que se va a hacer un Append
             // Es decir, no va a machacar lo que hay en el fichero
-            StreamWriter sw = new StreamWriter(nombreFichero, append, System.Text.Encoding.Default);
+            StreamWriter sw = new StreamWriter(nombreFichero, append, System.Text.Encoding.UTF8);
 
             sw.Write(linea);
             sw.Close();

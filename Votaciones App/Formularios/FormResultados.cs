@@ -106,5 +106,10 @@ namespace Votaciones_App
                 }
             }
         }
+
+        public void setLocation(Point location)
+        {
+            this.Location = location;
+        }
     }
 }

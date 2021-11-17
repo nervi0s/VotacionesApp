@@ -88,10 +88,11 @@ namespace Votaciones_App.Views
 
         private void panel_abre_lista_Click(object sender, EventArgs e)
         {
+            this.ventanaResultados.setLocation(new Point(((FormPrincipal)(this.Parent.Parent)).Left + ((FormPrincipal)(this.Parent.Parent)).Width, ((FormPrincipal)(this.Parent.Parent)).Top));
             this.ventanaResultados.Show();
             this.ventanaResultados.BringToFront();
         }
-        // ##############   Public events   ############## \\
+        // ##############   Public methods   ############## \\
         public int getTipoRecuento()
         {
             return this.tipoRecuento;
@@ -115,6 +116,11 @@ namespace Votaciones_App.Views
         public void setImageVoteStatus(Image image)
         {
             this.panel_indicador_estado.BackgroundImage = image;
+        }
+
+        public void setEnableButtonApagarMandos(bool value)
+        {
+            this.button_apagar_mandos.Enabled = value;
         }
 
         public FormResultados getVentanaResultados()

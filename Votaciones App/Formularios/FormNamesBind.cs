@@ -7,7 +7,7 @@ namespace Votaciones_App.Formularios
     public partial class FormNamesBind : Form
     {
         public static string[] names = new string[10];
-        CFileXML xmlFile = new CFileXML();
+        private CFileXML xmlFile = new CFileXML();
 
         // ##############   Constructor  ############## \\
         public FormNamesBind()

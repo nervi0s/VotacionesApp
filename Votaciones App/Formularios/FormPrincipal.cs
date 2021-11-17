@@ -11,13 +11,13 @@ namespace Votaciones_App
     // Clase encargada de gestionar los paneles que existen en la aplicación y la comunicación entre ellos
     public partial class FormPrincipal : Form
     {
-        UserControlConnectionChoice connectionChoicePanel;
-        UserControlSettings settingsPanel;
-        UserControlVoting votingPanel;
+        private UserControlConnectionChoice connectionChoicePanel;
+        private UserControlSettings settingsPanel;
+        private UserControlVoting votingPanel;
 
-        VoteManager voteManager;
+        private VoteManager voteManager;
 
-        CFileXML xmlFile = new CFileXML();
+        private readonly CFileXML xmlFile = new CFileXML();
 
         // ##############   Constructor  ############## \\
         public FormPrincipal()

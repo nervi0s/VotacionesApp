@@ -8,7 +8,7 @@ namespace Votaciones_App.Formularios
     // Clase encargada de seleccionar los ajustes de red para una conexión por Ethernet
     public partial class EthernetOptions : Form
     {
-        CFileXML xmlFile = new CFileXML();
+        private CFileXML xmlFile = new CFileXML();
 
         // ##############   Constructor  ############## \\
         public EthernetOptions()

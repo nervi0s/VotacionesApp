@@ -1,6 +1,7 @@
 ﻿using SunVote;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Votaciones_App.Formularios;
 using Votaciones_App.Views;
@@ -299,7 +300,7 @@ namespace Votaciones_App.Negocio
         {
             if (!idAllowed(id_mando))
             {
-                Console.WriteLine("ID del mando no permitido");
+                Console.WriteLine("ID del mando no permitido: " + id_mando);
                 return;
             }
 
@@ -314,9 +315,22 @@ namespace Votaciones_App.Negocio
                 {
                     if (getMandoById(id_mando).cantidadRespuestas < Mando.NUMERO_OPCIONES_MAXIMAS)
                     {
-                        getMandoById(id_mando).respondido = true;
-                        getMandoById(id_mando).respuesta += ";" + valor;
-                        getMandoById(id_mando).cantidadRespuestas++;
+                        if (!getMandoById(id_mando).respuesta.Split(';').Contains(valor))
+                        {
+                            getMandoById(id_mando).respondido = true;
+                            getMandoById(id_mando).respuesta += ";" + valor;
+                            getMandoById(id_mando).cantidadRespuestas++;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Voto repetido realizado por el mando: " + id_mando);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("El mando ya ha agotado su cantidad respuestas permitidas: " + id_mando);
+                        return;
                     }
                 }
                 else
@@ -331,6 +345,11 @@ namespace Votaciones_App.Negocio
                 {
                     getMandoById(id_mando).respondido = true;
                     getMandoById(id_mando).respuesta = ";" + valor;
+                }
+                else
+                {
+                    Console.WriteLine("El mando ya hizo su voto: " + id_mando);
+                    return;
                 }
             }
 
@@ -393,39 +412,15 @@ namespace Votaciones_App.Negocio
 
             foreach (Mando mando in this.listaMandos)
             {
-                resultados = resultados + mando.getID() + mando.respuesta + "\n";
+                resultados = resultados + mando.getID() + (string.IsNullOrEmpty(mando.respuesta) ? ";" : mando.respuesta) + "\n";
             }
-
+            Console.WriteLine(resultados);
             this.ficheroCSV.EscribeFichero(CAjustes.ruta_resultados + "Resultados.csv", false, resultados);
         }
 
         private bool idAllowed(int id)
         {
-            string[] ranges = CAjustes.rangos.Split(',');
-            List<List<int>> rangesList = new List<List<int>>();
-
-            foreach (string range in ranges)
-            {
-                List<int> data = new List<int>();
-                string[] twoValues = range.Split('-');
-                int numeroInferior = int.Parse(twoValues[0]);
-                int numeroSuperior = int.Parse(twoValues[1]);
-
-                data.Add(numeroInferior);
-                data.Add(numeroSuperior);
-
-                rangesList.Add(data);
-            }
-
-            foreach (List<int> range in rangesList)
-            {
-                if (id <= range[1] && id >= range[0])
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return FormMandosConfig.createIDsList().Contains(id);
         }
 
         private string parseLetter(string letter)

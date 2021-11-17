@@ -7,7 +7,7 @@ namespace Votaciones_App.Formularios
     // Clase encargada de configurar la cantidad de mandos a usar en una votación y sus rangos
     public partial class FormMandosConfig : Form
     {
-        CFileXML xmlFile = new CFileXML();
+        private CFileXML xmlFile = new CFileXML();
         private int numeroTotalMandos;
 
         // ##############   Constructor  ############## \\
@@ -103,7 +103,7 @@ namespace Votaciones_App.Formularios
             return true;
         }
 
-        // ##############   Public events   ############## \\
+        // ##############   Public methods   ############## \\
         public int getMandosTotales()
         {
             return this.numeroTotalMandos;
@@ -123,11 +123,15 @@ namespace Votaciones_App.Formularios
 
         private static int counterBetweenNumbers(string data)
         {
-            string[] range = data.Split('-');
-            int numeroInferior = int.Parse(range[0]);
-            int numeroSuperior = int.Parse(range[1]);
+            if (data.Contains("-"))
+            {
+                string[] range = data.Split('-');
+                int numeroInferior = int.Parse(range[0]);
+                int numeroSuperior = int.Parse(range[1]);
 
-            return numeroSuperior - numeroInferior + 1;
+                return numeroSuperior - numeroInferior + 1;
+            }
+            return 1;
         }
 
         public static List<int> createIDsList()
@@ -137,13 +141,20 @@ namespace Votaciones_App.Formularios
 
             foreach (string range in ranges)
             {
-                string[] twoValues = range.Split('-');
-                int numeroInferior = int.Parse(twoValues[0]);
-                int numeroSuperior = int.Parse(twoValues[1]);
-
-                for (int i = numeroInferior; i <= numeroSuperior; i++)
+                if (range.Contains("-"))
                 {
-                    ids.Add(i);
+                    string[] twoValues = range.Split('-');
+                    int numeroInferior = int.Parse(twoValues[0]);
+                    int numeroSuperior = int.Parse(twoValues[1]);
+
+                    for (int i = numeroInferior; i <= numeroSuperior; i++)
+                    {
+                        ids.Add(i);
+                    }
+                }
+                else
+                {
+                    ids.Add(int.Parse(range));
                 }
             }
             return ids;

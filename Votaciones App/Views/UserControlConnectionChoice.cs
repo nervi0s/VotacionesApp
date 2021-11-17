@@ -10,7 +10,7 @@ namespace Votaciones_App.Views
         public delegate void CommunicatorDelegate(string msg);
         public CommunicatorDelegate communicatorCallBack;
 
-        CFileXML xmlFile = new CFileXML();
+        private CFileXML xmlFile = new CFileXML();
 
         // ##############   Constructor  ############## \\
         public UserControlConnectionChoice()
