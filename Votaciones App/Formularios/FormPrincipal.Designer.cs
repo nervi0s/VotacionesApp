@@ -57,6 +57,7 @@
             this.Name = "FormPrincipal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Votaciones App";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormPrincipal_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormPpal_FormClosed);
             this.Load += new System.EventHandler(this.FormPpal_Load);
             this.ResumeLayout(false);

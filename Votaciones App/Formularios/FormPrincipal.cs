@@ -32,12 +32,17 @@ namespace Votaciones_App
             loadConnectionChoisePanel();
         }
 
-        private void FormPpal_FormClosed(object sender, FormClosedEventArgs e)
+        private void FormPrincipal_FormClosing(object sender, FormClosingEventArgs e)
         {
             string message = "Cerrando Aplicación";
-            string title = "Info";
-            MessageBox.Show(message, title, MessageBoxButtons.OK);
+            string title = "Información";
+            DialogResult dialogResult = MessageBox.Show(message, title, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+            if (dialogResult == DialogResult.Cancel)
+                e.Cancel = true; // Consume el evento de cerrar la ventana en caso de darle a Cancelar o cerrar el diálogo
+        }
 
+        private void FormPpal_FormClosed(object sender, FormClosedEventArgs e)
+        {
             if (this.voteManager != null && this.voteManager.isVoting())
                 this.voteManager.finalizarVotacion();
         }
@@ -47,7 +52,7 @@ namespace Votaciones_App
         // Carga el panel de elección de tipo de conexión
         private void loadConnectionChoisePanel()
         {
-            setFixedWindowSize();
+            setCustomWindowSizeChoicePanel();
 
             this.connectionChoicePanel = new UserControlConnectionChoice();
             this.connectionChoicePanel.communicatorCallBack += customsViewsCommHandler;
@@ -63,7 +68,7 @@ namespace Votaciones_App
         // Carga el panel de settings
         private void loadSettingsPanel()
         {
-            setFixedWindowSize();
+            setCustomWindowSizeSettingsPanel();
 
             if (this.settingsPanel == null)
             {
@@ -83,7 +88,7 @@ namespace Votaciones_App
         // Carga el panel de las votaciones
         private void loadVotingPanel()
         {
-            setCustomWindowSize();
+            setCustomWindowSizeVotingPanel();
 
             if (this.votingPanel == null)
             {
@@ -286,19 +291,28 @@ namespace Votaciones_App
         }
 
         // Establece propiedades de la ventana del FormPrincipal
-        private void setFixedWindowSize()
+        private void setCustomWindowSizeSettingsPanel()
         {
             this.WindowState = FormWindowState.Normal;
-            this.Size = new Size(1109, 454);
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.Size = new Size(1109, 454);
+            this.CenterToScreen();
             this.MaximizeBox = false;
         }
 
         // Establece propiedades de la ventana del FormPrincipal
-        private void setCustomWindowSize()
+        private void setCustomWindowSizeVotingPanel()
         {
             this.FormBorderStyle = FormBorderStyle.Sizable;
             this.MaximizeBox = true;
+        }
+
+        // Establece propiedades de la ventana del FormPrincipal
+        private void setCustomWindowSizeChoicePanel()
+        {
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+            this.Size = new Size(404, 385);
+            this.CenterToScreen();
         }
     }
 }
