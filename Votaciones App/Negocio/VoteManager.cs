@@ -412,7 +412,29 @@ namespace Votaciones_App.Negocio
 
             foreach (Mando mando in this.listaMandos)
             {
-                resultados = resultados + mando.getID() + (string.IsNullOrEmpty(mando.respuesta) ? ";" : mando.respuesta) + "\n";
+                if (string.IsNullOrEmpty(mando.respuesta))
+                {
+                    resultados = resultados + mando.getID() + ";" + "\n";
+                }
+                else
+                {
+                    if (UserControlVoting.array_nombres == null)
+                    {
+                        resultados = resultados + mando.getID() + mando.respuesta + "\n";
+                    }
+                    else
+                    {
+                        List<int> numerosVotados = getNumbersFromString(mando.respuesta);
+                        int ultimoVotoRealizado = numerosVotados[numerosVotados.Count - 1];
+                        string infoVotos = string.Empty;
+
+                        foreach (int numeroVotado in numerosVotados)
+                        {
+                            infoVotos += ";" + numeroVotado + "-" + UserControlVoting.array_nombres[numeroVotado - 1].Replace("\r\n", string.Empty);
+                        }
+                        resultados = resultados + mando.getID() + infoVotos + "\n";
+                    }
+                }
             }
             Console.WriteLine(resultados);
             this.ficheroCSV.EscribeFichero(CAjustes.ruta_resultados + "Resultados.csv", false, resultados);
@@ -475,6 +497,33 @@ namespace Votaciones_App.Negocio
                 }
             }
             return null;
+        }
+
+        private List<int> getNumbersFromString(string raw)
+        {
+            List<int> results = new List<int>();
+            string value = string.Empty;
+
+            for (int i = 0; i < raw.Length; i++)
+            {
+                if (char.IsDigit(raw[i]))
+                {
+                    value += raw[i];
+                }
+                else
+                {
+                    if (value.Length > 0)
+                    {
+                        results.Add(int.Parse(value));
+                        value = string.Empty;
+                    }
+                }
+            }
+            if (value.Length > 0)
+            {
+                results.Add(int.Parse(value));
+            }
+            return results;
         }
     }
 }
