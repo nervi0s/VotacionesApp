@@ -295,7 +295,7 @@ namespace Votaciones_App
         {
             this.WindowState = FormWindowState.Normal;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            this.Size = new Size(1109, 454);
+            this.Size = new Size(964, 412);
             this.CenterToScreen();
             this.MaximizeBox = false;
         }

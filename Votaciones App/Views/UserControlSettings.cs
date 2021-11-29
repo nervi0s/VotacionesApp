@@ -50,10 +50,14 @@ namespace Votaciones_App.Views
 
         private void comboBox_ajustes_tipo_votacion_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.panel_ajustes_num_opciones.Visible = this.comboBox_ajustes_tipo_votacion.SelectedIndex != 2;
-            if (!this.panel_ajustes_num_opciones.Visible)
+            if (this.comboBox_ajustes_tipo_votacion.SelectedIndex == 2)
             {
+                this.numericUpDown_ajustes_num_opciones.Enabled = false;
                 this.numericUpDown_ajustes_num_opciones.Value = 2;
+            }
+            else
+            {
+                this.numericUpDown_ajustes_num_opciones.Enabled = true; ;
             }
         }
 
@@ -69,13 +73,6 @@ namespace Votaciones_App.Views
             }
         }
 
-        private void button_ajustes_resultados_path_Click(object sender, EventArgs e)
-        {
-            if (this.folderBrowserDialog.ShowDialog() == DialogResult.OK)
-            {
-                this.textBox_ajustes_resultados_path.Text = this.folderBrowserDialog.SelectedPath + "\\";
-            }
-        }
         private void button_conf_names_Click(object sender, EventArgs e)
         {
             // Abrir formulario de relación de nombres con voto
@@ -86,6 +83,24 @@ namespace Votaciones_App.Views
             {
                 UserControlVoting.array_nombres = FormNamesBind.names;
             }
+        }
+
+        private void numericUpDown_max_op_ValueChanged(object sender, EventArgs e)
+        {
+            Mando.NUMERO_OPCIONES_MAXIMAS = (int)this.numericUpDown_max_op.Value;
+        }
+
+        private void textBox_ajustes_resultados_path_Click(object sender, EventArgs e)
+        {
+            if (this.folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.textBox_ajustes_resultados_path.Text = this.folderBrowserDialog.SelectedPath + "\\";
+            }
+        }
+
+        private void textBox_ajustes_resultados_path_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true; // Consume el evento de teclear en ese textBox
         }
 
         private void button_ajustes_aceptar_Click(object sender, EventArgs e)
@@ -122,7 +137,7 @@ namespace Votaciones_App.Views
                 // Leer Ajustes del fichero XML y establecer controles
                 this.button_mandos.Text = xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales") + " Mandos";
                 this.numericUpDown_ajustes_tiempo_crono.Value = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "TiempoCrono"));
-                this.label_base_id.Text = xmlFile.LeerXml(CAjustes.ruta_ajustes, "BaseAntena");
+                this.textBox_base_id.Text = xmlFile.LeerXml(CAjustes.ruta_ajustes, "BaseAntena");
                 this.radioButton_ajustes_cambiar_resp_Si.Checked = bool.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "PermitirCambioRespuesta"));
                 this.radioButton_ajustes_cambiar_resp_No.Checked = !bool.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "PermitirCambioRespuesta")); ;
                 this.comboBox_ajustes_tipo_votacion.SelectedIndex = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "TipoVotacion"));
@@ -137,7 +152,7 @@ namespace Votaciones_App.Views
                 // Cargar ajustes por defecto si se encuentra un error en el XML
                 this.button_mandos.Text = "100" + " Mandos";
                 this.numericUpDown_ajustes_tiempo_crono.Value = 120;
-                this.label_base_id.Text = "1";
+                this.textBox_base_id.Text = "1";
                 this.radioButton_ajustes_cambiar_resp_Si.Checked = false;
                 this.radioButton_ajustes_cambiar_resp_No.Checked = true;
                 this.comboBox_ajustes_tipo_votacion.SelectedIndex = 0;
@@ -153,8 +168,12 @@ namespace Votaciones_App.Views
             {
                 this.radioButton_ajustes_cambiar_resp_Si.Enabled = false;
                 this.radioButton_ajustes_cambiar_resp_No.Enabled = false;
-                this.panel_op_max.Visible = true;
                 Mando.NUMERO_OPCIONES_MAXIMAS = (int)this.numericUpDown_max_op.Value;
+            }
+            else
+            {
+                this.label_op_maximas.Visible = false;
+                this.numericUpDown_max_op.Visible = false;
             }
         }
 
@@ -216,7 +235,6 @@ namespace Votaciones_App.Views
             return true;
         }
 
-
         // ##############   Public functions   ############## \\
         public void setImageConnectionStatus(Image image)
         {
@@ -226,11 +244,6 @@ namespace Votaciones_App.Views
         public void setEnableButtonAceptar(bool value)
         {
             this.button_ajustes_aceptar.Enabled = value;
-        }
-
-        private void numericUpDown_max_op_ValueChanged(object sender, EventArgs e)
-        {
-            Mando.NUMERO_OPCIONES_MAXIMAS = (int)this.numericUpDown_max_op.Value;
         }
     }
 }
