@@ -21,6 +21,7 @@ namespace Votaciones_App.Formularios
         {
             checkAndSetFileData();
         }
+
         private void button_aceptar_Click(object sender, EventArgs e)
         {
             if (validaAjustesInterfaz())

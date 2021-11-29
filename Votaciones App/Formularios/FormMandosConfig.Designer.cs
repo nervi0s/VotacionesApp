@@ -29,6 +29,7 @@ namespace Votaciones_App.Formularios
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMandosConfig));
             this.panel_base = new System.Windows.Forms.Panel();
             this.tableLayoutPanel_base = new System.Windows.Forms.TableLayoutPanel();
             this.textBox_rangos = new System.Windows.Forms.TextBox();
@@ -169,8 +170,10 @@ namespace Votaciones_App.Formularios
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(237)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(467, 200);
             this.Controls.Add(this.panel_base);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMandosConfig";
             this.Text = "Mandos Config";
             this.Load += new System.EventHandler(this.FormMandosConfig_Load);
