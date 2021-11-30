@@ -96,7 +96,9 @@ namespace Votaciones_App
                 this.voteManager.setVotingPanel(this.votingPanel);
                 this.votingPanel.communicatorCallBack += customsViewsCommHandler;
             }
+
             this.voteManager.resetVotacion();
+            this.voteManager.actualizarGrafico();
             this.panel_root.Controls.Add(votingPanel);
         }
 
@@ -104,6 +106,7 @@ namespace Votaciones_App
         private void removeVotingPanel()
         {
             this.panel_root.Controls.Remove(this.votingPanel);
+            this.votingPanel.getVentanaResultados().Hide();
         }
 
         // Maneja las llamadas desde otros paneles
@@ -278,7 +281,7 @@ namespace Votaciones_App
 
             if (CAjustes.permitir_multichoice)
             {
-                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "PermitirCambioRespuesta", "True");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "PermitirCambioRespuesta", "False");
             }
         }
 

@@ -89,6 +89,8 @@ namespace Votaciones_App.Negocio
 
             // Iniciaciación de la cuenta atrás
             iniciarCuentaAtras();
+
+            actualizarGrafico();
         }
 
         public void finalizarVotacion()
@@ -222,7 +224,7 @@ namespace Votaciones_App.Negocio
                     this.choice.ModifyMode = CAjustes.permitir_cambio_respuesta ? 1 : 0;
                     this.choice.SecrecyMode = 0;
                     this.choice.Options = CAjustes.numero_opciones;
-                    this.choice.OptionalN = 1;
+                    this.choice.OptionalN = Mando.NUMERO_OPCIONES_MAXIMAS; // Se usa para determinar a cuantas personas se pueden votar en el multichoice
                     this.choice.StartMode = 1; // Limpia los mandos al empezar la votación
 
                     if (this.choice.Start() == "0") // Start() empieza la votación
@@ -241,7 +243,7 @@ namespace Votaciones_App.Negocio
                     this.choice.ModifyMode = CAjustes.permitir_cambio_respuesta ? 1 : 0;
                     this.choice.SecrecyMode = 0;
                     this.choice.Options = CAjustes.numero_opciones;
-                    this.choice.OptionalN = 1;
+                    this.choice.OptionalN = Mando.NUMERO_OPCIONES_MAXIMAS; // Se usa para determinar a cuantas personas se pueden votar en el multichoice
                     this.choice.StartMode = 1; // Limpia los mandos al empezar la votación
 
                     if (this.choice.Start() == "0") // Start() empieza la votación
@@ -306,7 +308,9 @@ namespace Votaciones_App.Negocio
 
             // Paso de letra a número en caso de haber seleccionado el tipo de votación numérica
             if (CAjustes.tipo_votacion == 0)
-                valor = parseLetter(valor);
+                valor = parseLetters(valor);
+            else if (CAjustes.tipo_votacion == 1)
+                valor = formatLetters(valor);
 
             // Check si se permite o no cambio de respuesta
             if (CAjustes.permitir_cambio_respuesta)
@@ -336,7 +340,7 @@ namespace Votaciones_App.Negocio
                 else
                 {
                     getMandoById(id_mando).respondido = true;
-                    getMandoById(id_mando).respuesta = ";" + valor;
+                    getMandoById(id_mando).respuesta = valor;
                 }
             }
             else
@@ -344,7 +348,7 @@ namespace Votaciones_App.Negocio
                 if (!getMandoById(id_mando).respondido)
                 {
                     getMandoById(id_mando).respondido = true;
-                    getMandoById(id_mando).respuesta = ";" + valor;
+                    getMandoById(id_mando).respuesta = valor;
                 }
                 else
                 {
@@ -400,7 +404,7 @@ namespace Votaciones_App.Negocio
             }
         }
 
-        private void actualizarGrafico()
+        public void actualizarGrafico()
         {
             this.votingPanel.actualizarGrafica(this.listaMandos, recuentaVotados());
         }
@@ -418,21 +422,36 @@ namespace Votaciones_App.Negocio
                 }
                 else
                 {
-                    if (UserControlVoting.array_nombres == null)
+                    if (UserControlVoting.array_nombres == null) // Si no se han relacionado opciones de votos con nombres
                     {
                         resultados = resultados + mando.getID() + mando.respuesta + "\n";
                     }
                     else
                     {
-                        List<int> numerosVotados = getNumbersFromString(mando.respuesta);
-                        int ultimoVotoRealizado = numerosVotados[numerosVotados.Count - 1];
-                        string infoVotos = string.Empty;
-
-                        foreach (int numeroVotado in numerosVotados)
+                        if (CAjustes.tipo_votacion == 0) // Si es una votación de números
                         {
-                            infoVotos += ";" + numeroVotado + "-" + UserControlVoting.array_nombres[numeroVotado - 1].Replace("\r\n", string.Empty);
+                            List<int> numerosVotados = getNumbersFromString(mando.respuesta);
+                            int ultimoVotoRealizado = numerosVotados[numerosVotados.Count - 1];
+                            string infoVotos = string.Empty;
+
+                            foreach (int numeroVotado in numerosVotados)
+                            {
+                                infoVotos += ";" + numeroVotado + "-" + UserControlVoting.array_nombres[numeroVotado - 1].Replace("\r\n", string.Empty);
+                            }
+                            resultados = resultados + mando.getID() + infoVotos + "\n";
                         }
-                        resultados = resultados + mando.getID() + infoVotos + "\n";
+                        else if (CAjustes.tipo_votacion == 1) // Si es una votación de letras
+                        {
+                            List<int> numerosVotados = getNumericEquivalent(mando.respuesta);
+                            int ultimoVotoRealizado = numerosVotados[numerosVotados.Count - 1];
+                            string infoVotos = string.Empty;
+
+                            foreach (int numeroVotado in numerosVotados)
+                            {
+                                infoVotos += ";" + parseNumber(numeroVotado.ToString()) + "-" + UserControlVoting.array_nombres[numeroVotado - 1].Replace("\r\n", string.Empty);
+                            }
+                            resultados = resultados + mando.getID() + infoVotos + "\n";
+                        }
                     }
                 }
             }
@@ -443,6 +462,54 @@ namespace Votaciones_App.Negocio
         private bool idAllowed(int id)
         {
             return FormMandosConfig.createIDsList().Contains(id);
+        }
+
+        private string parseLetters(string letters)
+        {
+            int lettersLength = letters.Length;
+            string data = string.Empty;
+
+            if (letters.Length > 1)
+            {
+                foreach (string letter in letters.Select(x => x.ToString()).ToArray())
+                {
+                    data += ";" + parseLetter(letter);
+                }
+            }
+            else
+            {
+                data += ";" + parseLetter(letters);
+            }
+            return data;
+        }
+
+        private string parseNumber(string number)
+        {
+            switch (number)
+            {
+                case "1":
+                    return "A";
+                case "2":
+                    return "B";
+                case "3":
+                    return "C";
+                case "4":
+                    return "D";
+                case "5":
+                    return "E";
+                case "6":
+                    return "F";
+                case "7":
+                    return "G";
+                case "8":
+                    return "H";
+                case "9":
+                    return "I";
+                case "10":
+                    return "J";
+                default:
+                    return "_";
+            }
         }
 
         private string parseLetter(string letter)
@@ -472,6 +539,18 @@ namespace Votaciones_App.Negocio
                 default:
                     return "_";
             }
+        }
+
+        private string formatLetters(string letters)
+        {
+            string data = string.Empty;
+
+            foreach (string letter in letters.Select(x => x.ToString()).ToArray())
+            {
+                data += ";" + letter;
+            }
+
+            return data;
         }
 
         private int recuentaVotados()
@@ -522,6 +601,19 @@ namespace Votaciones_App.Negocio
             if (value.Length > 0)
             {
                 results.Add(int.Parse(value));
+            }
+            return results;
+        }
+
+        private List<int> getNumericEquivalent(string raw)
+        {
+            List<int> results = new List<int>();
+            string[] letters = raw.Split(';');
+
+            foreach (string letter in letters)
+            {
+                if (letter != "")
+                    results.Add(int.Parse(parseLetter(letter)));
             }
             return results;
         }

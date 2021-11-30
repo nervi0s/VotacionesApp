@@ -5,7 +5,7 @@ namespace Votaciones_App
     // Clase que representa un mando que realiza una votación
     public class Mando
     {
-        public static int NUMERO_OPCIONES_MAXIMAS = 3;
+        public static int NUMERO_OPCIONES_MAXIMAS = 1;
 
         private int id;
 

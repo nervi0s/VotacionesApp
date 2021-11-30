@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Votaciones_App.Formularios;
+using Votaciones_App.Views;
 
 namespace Votaciones_App
 {
     // Clase que crea una ventana auxiliar que muestra información de los mandos que votan y sus respuestas
     public partial class FormResultados : Form
     {
-        private bool inicializado = false;
 
         // ##############   Constructor  ############## \\
         public FormResultados(Point location)
@@ -34,24 +34,9 @@ namespace Votaciones_App
         {
             List<int> ids = FormMandosConfig.createIDsList();
 
-            if (this.inicializado)
-            {
-                for (int i = 0; i < this.dataGridView1.Columns.Count; i++)
-                {
-                    for (int j = 0; j < this.dataGridView1.Rows.Count; j++)
-                    {
-                        this.dataGridView1.Rows[j].Cells[i].Value = "";
-                    }
-                }
-
-                for (int j = 0; j < this.dataGridView1.Rows.Count; j++)
-                {
-                    this.dataGridView1.Rows[j].Cells[0].Value = ids[j];
-                }
-                this.dataGridView1.ClearSelection();
-                return;
-            }
-
+            this.dataGridView1.Columns.Clear(); // Se limpia el dataGridView
+            this.dataGridView1.Rows.Clear();  // Se limpia el dataGridView
+            this.dataGridView1.Refresh();  // Se limpia el dataGridView
 
             this.dataGridView1.Columns.Add("Id", "ID");
             this.dataGridView1.Columns["Id"].Width = 50;
@@ -86,7 +71,6 @@ namespace Votaciones_App
                 }
             }
             this.dataGridView1.ClearSelection();
-            this.inicializado = true;
         }
 
         public void actualizar_grid(List<Mando> lista_mandos)
@@ -97,7 +81,23 @@ namespace Votaciones_App
                 {
                     if (lista_mandos[i].respuesta.Length > 1)
                     {
-                        this.dataGridView1.Rows[i].Cells[1].Value = lista_mandos[i].respuesta.Substring(1);
+                        if (UserControlVoting.array_nombres == null)
+                        {
+                            this.dataGridView1.Rows[i].Cells[1].Value = lista_mandos[i].respuesta.Substring(1);
+                        }
+                        else
+                        {
+                            string toUserInterface = string.Empty;
+                            string[] respuestas = lista_mandos[i].respuesta.Substring(1).Split(';');
+                            foreach (string respuesta in respuestas)
+                            {
+                                if (CAjustes.tipo_votacion == 0) // Votación de números
+                                    toUserInterface += "; " + respuesta + "-" + UserControlVoting.array_nombres[int.Parse(respuesta) - 1];
+                                else if (CAjustes.tipo_votacion == 1) // Votación de letras
+                                    toUserInterface += "; " + respuesta + "-" + UserControlVoting.array_nombres[int.Parse(parseLetter(respuesta)) - 1];
+                            }
+                            this.dataGridView1.Rows[i].Cells[1].Value = toUserInterface.Substring(2);
+                        }
                     }
                 }
                 catch (Exception e)
@@ -110,6 +110,36 @@ namespace Votaciones_App
         public void setLocation(Point location)
         {
             this.Location = location;
+        }
+
+        // ##############   Private functions   ############## \\
+        private string parseLetter(string letter)
+        {
+            switch (letter)
+            {
+                case "A":
+                    return "1";
+                case "B":
+                    return "2";
+                case "C":
+                    return "3";
+                case "D":
+                    return "4";
+                case "E":
+                    return "5";
+                case "F":
+                    return "6";
+                case "G":
+                    return "7";
+                case "H":
+                    return "8";
+                case "I":
+                    return "9";
+                case "J":
+                    return "10";
+                default:
+                    return "_";
+            }
         }
     }
 }
