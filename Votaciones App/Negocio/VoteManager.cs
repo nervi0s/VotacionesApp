@@ -295,6 +295,7 @@ namespace Votaciones_App.Negocio
                     }
                     break;
             }
+            this.apagarMandos();
         }
 
         // Método llamado cuando se detecta una pulsación de un mando de votación
