@@ -77,6 +77,12 @@
     <Compile Include="Formularios\EthernetOptions.Designer.cs">
       <DependentUpon>EthernetOptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\FormConfigMandos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\FormConfigMandos.Designer.cs">
+      <DependentUpon>FormConfigMandos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\FormMandosConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,6 +135,9 @@
     </Compile>
     <EmbeddedResource Include="Formularios\EthernetOptions.resx">
       <DependentUpon>EthernetOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\FormConfigMandos.resx">
+      <DependentUpon>FormConfigMandos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\FormMandosConfig.resx">
       <DependentUpon>FormMandosConfig.cs</DependentUpon>

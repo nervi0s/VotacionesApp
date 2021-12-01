@@ -63,13 +63,21 @@ namespace Votaciones_App.Views
 
         private void button_mandos_Click(object sender, EventArgs e)
         {
-            // Abrir formulario de ajustes de Mandos
-            FormMandosConfig formMandosConfig = new FormMandosConfig();
-            formMandosConfig.StartPosition = FormStartPosition.CenterParent;
+            //// Abrir formulario de ajustes de Mandos
+            //FormMandosConfig formMandosConfig = new FormMandosConfig();
+            //formMandosConfig.StartPosition = FormStartPosition.CenterParent;
 
-            if (formMandosConfig.ShowDialog() == DialogResult.OK)
+            //if (formMandosConfig.ShowDialog() == DialogResult.OK)
+            //{
+            //    this.button_mandos.Text = formMandosConfig.getMandosTotales().ToString() + " Mandos";
+            //}
+
+            FormConfigMandos formConfigMandos = new FormConfigMandos();
+            formConfigMandos.StartPosition = FormStartPosition.CenterParent;
+
+            if (formConfigMandos.ShowDialog() == DialogResult.OK)
             {
-                this.button_mandos.Text = formMandosConfig.getMandosTotales().ToString() + " Mandos";
+                this.button_mandos.Text = formConfigMandos.getMandosTotales().ToString() + " Mandos";
             }
         }
 
@@ -135,7 +143,7 @@ namespace Votaciones_App.Views
             if (validaAjustesFicheroXml())
             {
                 // Leer Ajustes del fichero XML y establecer controles
-                this.button_mandos.Text = xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales") + " Mandos";
+                this.button_mandos.Text = FormConfigMandos.counterFromString(xmlFile.LeerXml(CAjustes.ruta_ajustes, "Rangos")) + " Mandos";
                 this.numericUpDown_ajustes_tiempo_crono.Value = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "TiempoCrono"));
                 this.textBox_base_id.Text = xmlFile.LeerXml(CAjustes.ruta_ajustes, "BaseAntena");
                 this.radioButton_ajustes_cambiar_resp_Si.Checked = bool.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "PermitirCambioRespuesta"));
@@ -179,11 +187,11 @@ namespace Votaciones_App.Views
 
         private bool validaAjustesFicheroXml()
         {
-            if (int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales")) != FormMandosConfig.counterFromString(xmlFile.LeerXml(CAjustes.ruta_ajustes, "Rangos")))
-            {
-                MessageBox.Show("El número de mandos totales debe ser igual que el número de mandos en los rangos. Revisar los ajustes de los mandos", "Error en el archivo XML");
-                return false;
-            }
+            //if (int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales")) != FormMandosConfig.counterFromString(xmlFile.LeerXml(CAjustes.ruta_ajustes, "Rangos")))
+            //{
+            //    MessageBox.Show("El número de mandos totales debe ser igual que el número de mandos en los rangos. Revisar los ajustes de los mandos", "Error en el archivo XML");
+            //    return false;
+            //}
 
             if (int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "TiempoCrono")) < 1 || int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "TiempoCrono")) > 1000)
             {

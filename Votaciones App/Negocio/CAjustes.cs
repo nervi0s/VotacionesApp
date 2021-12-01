@@ -6,6 +6,7 @@ namespace Votaciones_App
     {
         public static int base_antena_id;
         public static int tipo_conexion; // 1 Para conexión USB. 2 Para conexión Ethernet *
+        public static bool automode; // True para mandos sin rangos conocidos. False para mandos con rangos conocidos *
         public static bool permitir_multichoice;
         public static int tiempo_crono;
         public static int num_mandos;

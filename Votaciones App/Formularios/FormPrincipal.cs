@@ -262,8 +262,8 @@ namespace Votaciones_App
             }
 
             // Se cargan en memoria ajustes básicos
-            CAjustes.num_mandos = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales"));
             CAjustes.rangos = xmlFile.LeerXml(CAjustes.ruta_ajustes, "Rangos");
+            CAjustes.num_mandos = Formularios.FormConfigMandos.counterFromString(CAjustes.rangos);
         }
 
         // Carga un diálogo de selección para la multirespuesta

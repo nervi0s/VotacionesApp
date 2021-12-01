@@ -127,12 +127,16 @@ namespace Votaciones_App.Negocio
                 this.listaMandos.Clear();
             }
 
-            // Relleno la lista de mandos
             this.listaMandos = new List<Mando>();
-            List<int> ids = FormMandosConfig.createIDsList();
-            for (int i = 0; i < CAjustes.num_mandos; i++)
+
+            if (!CAjustes.automode)
             {
-                this.listaMandos.Add(new Mando(ids[i]));
+                // Relleno la lista de mandos
+                List<int> ids = FormMandosConfig.createIDsList();
+                for (int i = 0; i < CAjustes.num_mandos; i++)
+                {
+                    this.listaMandos.Add(new Mando(ids[i]));
+                }
             }
 
             //Configuración del panel de votaciones
@@ -298,10 +302,25 @@ namespace Votaciones_App.Negocio
             this.apagarMandos();
         }
 
+        private bool colorize = true;
+
         // Método llamado cuando se detecta una pulsación de un mando de votación
         private void onKeyRemotePressedDetected(string id_base, int id_mando, string valor, double tiempo_respuesta)
         {
-            if (!idAllowed(id_mando))
+            if (CAjustes.automode)
+            {
+                if (this.listaMandos.Count + 1 <= CAjustes.num_mandos)
+                {
+                    this.listaMandos.Add(new Mando(id_mando));
+                }
+                else
+                {
+                    Console.WriteLine("El máximo de mandos ya ha votado: " + id_mando);
+                    return;
+                }
+            }
+
+            if (!idAllowed(id_mando) && !CAjustes.automode)
             {
                 Console.WriteLine("ID del mando no permitido: " + id_mando);
                 return;
@@ -312,6 +331,17 @@ namespace Votaciones_App.Negocio
                 valor = parseLetters(valor);
             else if (CAjustes.tipo_votacion == 1)
                 valor = formatLetters(valor);
+
+            if (CAjustes.automode)
+            {
+                colorize = !colorize;
+                this.votingPanel.getVentanaResultados().GetDataGridView().Rows.Add(id_mando, valor);
+                if (colorize)
+                {
+                    System.Drawing.Color color = System.Drawing.Color.FromArgb(227, 219, 236);
+                    this.votingPanel.getVentanaResultados().GetDataGridView().Rows[this.votingPanel.getVentanaResultados().GetDataGridView().Rows.Count - 1].DefaultCellStyle.BackColor = color;
+                }
+            }
 
             // Check si se permite o no cambio de respuesta
             if (CAjustes.permitir_cambio_respuesta)

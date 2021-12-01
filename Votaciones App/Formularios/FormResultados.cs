@@ -32,7 +32,19 @@ namespace Votaciones_App
         // ##############   Public functions   ############## \\
         public void inicializa_grid()
         {
-            List<int> ids = FormMandosConfig.createIDsList();
+            List<int> ids = new List<int>();
+            if (!CAjustes.automode) // Si no está activo el automode
+            {
+                ids = FormMandosConfig.createIDsList();
+            }
+            //else // Si está activo el automode
+            //{
+            //    ids = new List<int>();
+            //    for (int i = 1; i <= CAjustes.num_mandos; i++)
+            //    {
+            //        ids.Add(i);
+            //    }
+            //}
 
             this.dataGridView1.Columns.Clear(); // Se limpia el dataGridView
             this.dataGridView1.Rows.Clear();  // Se limpia el dataGridView
@@ -55,21 +67,25 @@ namespace Votaciones_App
             this.dataGridView1.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             this.dataGridView1.Columns[1].DefaultCellStyle.Font = new Font("Microsoft Sans", 8, FontStyle.Regular);
 
-            //Meto las filas
-            for (int i = 0; i < CAjustes.num_mandos; i++)
+            if (!CAjustes.automode)
             {
-                this.dataGridView1.Rows.Add(ids[i], "");
-            }
-
-            // Pongo de otro color las celdas alternando
-            for (int i = 0; i < this.dataGridView1.Rows.Count; i++)
-            {
-                if (i % 2 != 0)
+                //Meto las filas
+                for (int i = 0; i < CAjustes.num_mandos; i++)
                 {
-                    Color color = Color.FromArgb(227, 219, 236);
-                    this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = color;
+                    this.dataGridView1.Rows.Add(ids[i], "");
+                }
+
+                // Pongo de otro color las celdas alternando
+                for (int i = 0; i < this.dataGridView1.Rows.Count; i++)
+                {
+                    if (i % 2 != 0)
+                    {
+                        Color color = Color.FromArgb(227, 219, 236);
+                        this.dataGridView1.Rows[i].DefaultCellStyle.BackColor = color;
+                    }
                 }
             }
+
             this.dataGridView1.ClearSelection();
         }
 
@@ -110,6 +126,11 @@ namespace Votaciones_App
         public void setLocation(Point location)
         {
             this.Location = location;
+        }
+
+        public DataGridView GetDataGridView()
+        {
+            return this.dataGridView1;
         }
 
         // ##############   Private functions   ############## \\
