@@ -182,7 +182,7 @@ namespace Votaciones_App.Views
                             contador[i]++;
                         }
                     }
-                    chart.Series["Votos"].Points.AddXY(array_letras[i], contador[i]);
+                    chart.Series["Votos"].Points.AddXY(array_nombres == null ? array_letras[i] : array_nombres[i], contador[i]);
                     chart.Refresh();
                 }
             }

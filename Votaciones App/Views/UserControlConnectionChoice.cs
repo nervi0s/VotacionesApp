@@ -22,70 +22,40 @@ namespace Votaciones_App.Views
         private void UserControlConnectionChoice_Load(object sender, EventArgs e)
         {
             this.Dock = DockStyle.Fill; // Dock style
-            this.textBox_id.Text = xmlFile.LeerXml(CAjustes.ruta_ajustes, "BaseAntena");
+            this.numericUpDown_id.Value = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "BaseAntena"));
         }
 
         private void button_usb_Click(object sender, EventArgs e)
         {
-            if (validaAjustesInterfaz())
-            {
-                CAjustes.tipo_conexion = 1;
+            CAjustes.tipo_conexion = 1;
 
-                // Se guardan en el fichero los datos proporcionados desde la UI
-                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "BaseAntena", this.textBox_id.Text);
+            // Se guardan en el fichero los datos proporcionados desde la UI
+            xmlFile.EscribirXml(CAjustes.ruta_ajustes, "BaseAntena", this.numericUpDown_id.Value.ToString());
 
-                // Se cargan en memoria (clase CAjustes) los ajustes
-                CAjustes.base_antena_id = int.Parse(this.textBox_id.Text);
+            // Se cargan en memoria (clase CAjustes) los ajustes
+            CAjustes.base_antena_id = (int)this.numericUpDown_id.Value;
 
-                this.communicatorCallBack("UserControlConnectionChoice"); // Comunicación al Form Principal
-            }
+            this.communicatorCallBack("UserControlConnectionChoice"); // Comunicación al Form Principal
         }
 
         private void button_ethernet_Click(object sender, EventArgs e)
         {
-            if (validaAjustesInterfaz())
+            CAjustes.tipo_conexion = 2;
+
+            // Abrir formulario de ajustes de Ethernet
+            EthernetOptions ethernetOptions = new EthernetOptions();
+            ethernetOptions.StartPosition = FormStartPosition.CenterParent;
+
+            if (ethernetOptions.ShowDialog() == DialogResult.OK)
             {
-                CAjustes.tipo_conexion = 2;
+                // Se guardan en el fichero los datos proporcionados desde la UI
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "BaseAntena", this.numericUpDown_id.Value.ToString());
 
-                // Abrir formulario de ajustes de Ethernet
-                EthernetOptions ethernetOptions = new EthernetOptions();
-                ethernetOptions.StartPosition = FormStartPosition.CenterParent;
+                // Se cargan en memoria (clase CAjustes) los ajustes
+                CAjustes.base_antena_id = (int)this.numericUpDown_id.Value;
 
-                if (ethernetOptions.ShowDialog() == DialogResult.OK)
-                {
-                    // Se guardan en el fichero los datos proporcionados desde la UI
-                    xmlFile.EscribirXml(CAjustes.ruta_ajustes, "BaseAntena", this.textBox_id.Text);
-
-                    // Se cargan en memoria (clase CAjustes) los ajustes
-                    CAjustes.base_antena_id = int.Parse(this.textBox_id.Text);
-
-                    this.communicatorCallBack("UserControlConnectionChoice"); // Comunicación al Form Principal
-                }
+                this.communicatorCallBack("UserControlConnectionChoice"); // Comunicación al Form Principal
             }
-        }
-
-        // To prevent non numeric values
-        private void textBox_id_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-                e.Handled = true;
-        }
-
-        // ##############   Validation   ############## \\
-        private bool validaAjustesInterfaz()
-        {
-            if (string.IsNullOrEmpty(this.textBox_id.Text))
-            {
-                MessageBox.Show("Debe introducir un ID en el campo. Por favor, proporcione datos correctos.", "Error de entrada");
-                return false;
-            }
-
-            if (!int.TryParse(this.textBox_id.Text, out _))
-            {
-                MessageBox.Show("El ID debe ser un número entero. Por favor, Proporcione datos correctos", "Error de entrada");
-                return false;
-            }
-            return true;
         }
     }
 }

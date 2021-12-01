@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Votaciones_App.Formularios
@@ -22,36 +24,65 @@ namespace Votaciones_App.Formularios
             checkAndSetFileData();
         }
 
+        private void textBox_rangos_TextChanged(object sender, EventArgs e)
+        {
+            if (this.textBox_rangos.Text.Contains("."))
+            {
+                this.button_aceptar.Enabled = false;
+                this.textBox_mandos.Text = "Error en el formato de rangos";
+            }
+            else if (this.textBox_rangos.Text.Contains(" "))
+            {
+                this.button_aceptar.Enabled = false; ;
+                this.textBox_mandos.Text = "Error en el formato de rangos";
+            }
+            else if (this.textBox_rangos.Text.Any(x => char.IsLetter(x)))
+            {
+                this.button_aceptar.Enabled = false; ;
+                this.textBox_mandos.Text = "Error en el formato de rangos";
+            }
+            else if (System.Text.RegularExpressions.Regex.IsMatch(this.textBox_rangos.Text, @"^(\d*-\d*-+\d*)$"))
+            {
+                this.button_aceptar.Enabled = false; ;
+                this.textBox_mandos.Text = "Error en el formato de rangos";
+            }
+            else if (this.textBox_rangos.Text.EndsWith(","))
+            {
+                this.button_aceptar.Enabled = false; ;
+                this.textBox_mandos.Text = "Error en el formato de rangos";
+            }
+            else if (counterFromString(this.textBox_rangos.Text) == -1)
+            {
+                this.button_aceptar.Enabled = false;
+                this.textBox_mandos.Text = "Error en el formato de rangos";
+            }
+            else
+            {
+                this.textBox_mandos.Text = counterFromString(this.textBox_rangos.Text).ToString();
+                this.button_aceptar.Enabled = true;
+            }
+        }
+
         private void button_aceptar_Click(object sender, EventArgs e)
         {
-            if (validaAjustesInterfaz())
-            {
-                // Se guardan en el fichero los datos proporcionados desde la UI
-                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "MandosTotales", this.textBox_mandos.Text);
-                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Rangos", this.textBox_rangos.Text);
+            // Se guardan en el fichero los datos proporcionados desde la UI
+            xmlFile.EscribirXml(CAjustes.ruta_ajustes, "MandosTotales", this.textBox_mandos.Text);
+            xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Rangos", this.textBox_rangos.Text);
 
-                // Se cargan en memoria (clase CAjustes) los ajustes
-                CAjustes.num_mandos = int.Parse(this.textBox_mandos.Text);
-                CAjustes.rangos = this.textBox_rangos.Text;
+            // Se cargan en memoria (clase CAjustes) los ajustes
+            CAjustes.num_mandos = int.Parse(this.textBox_mandos.Text);
+            CAjustes.rangos = this.textBox_rangos.Text;
 
-                this.numeroTotalMandos = counterFromString(this.textBox_rangos.Text);
+            this.numeroTotalMandos = counterFromString(this.textBox_rangos.Text);
 
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-            }
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void button_cancelar_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
-        }
-
-        // To prevent non numeric values
-        private void textBox_mandos_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-                e.Handled = true;
         }
 
         // ##############   Validation   ############## \\
@@ -79,27 +110,6 @@ namespace Votaciones_App.Formularios
                 return false;
             }
 
-            //ToDO expresión regular para validar de los rangos que viene en el XML
-
-            return true;
-        }
-
-        private bool validaAjustesInterfaz()
-        {
-            if (!int.TryParse(this.textBox_mandos.Text, out _))
-            {
-                MessageBox.Show("Debe introducir un número entero en los mandos totales. Proporcione datos correctos", "Error de entrada");
-                return false;
-            }
-
-            if (counterFromString(this.textBox_rangos.Text) != int.Parse(this.textBox_mandos.Text))
-            {
-                MessageBox.Show("Número de mandos totales distinto al número de mandos en los rangos", "Error de entrada");
-                return false;
-            }
-
-            //ToDo expresión regular para validar datos de entrada de los rangos
-
             return true;
         }
 
@@ -112,26 +122,40 @@ namespace Votaciones_App.Formularios
         // ##############   Static methods   ############## \\
         public static int counterFromString(string rawData)
         {
-            int result = 0;
-            string[] ranges = rawData.Split(',');
-            foreach (string range in ranges)
+            try
             {
-                result += counterBetweenNumbers(range);
+                int result = 0;
+                string[] ranges = rawData.Split(',');
+                foreach (string range in ranges)
+                {
+                    result += counterBetweenNumbers(range);
+                }
+                return result;
             }
-            return result;
+            catch (Exception)
+            {
+                return -1;
+            }
         }
 
         private static int counterBetweenNumbers(string data)
         {
-            if (data.Contains("-"))
+            try
             {
-                string[] range = data.Split('-');
-                int numeroInferior = int.Parse(range[0]);
-                int numeroSuperior = int.Parse(range[1]);
+                if (data.Contains("-"))
+                {
+                    string[] range = data.Split('-');
+                    int numeroInferior = int.Parse(range[0]);
+                    int numeroSuperior = int.Parse(range[1]);
 
-                return numeroSuperior - numeroInferior + 1;
+                    return numeroSuperior - numeroInferior + 1;
+                }
+                return 1;
             }
-            return 1;
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public static List<int> createIDsList()
