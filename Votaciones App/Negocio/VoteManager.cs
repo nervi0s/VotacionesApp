@@ -132,7 +132,7 @@ namespace Votaciones_App.Negocio
             if (!CAjustes.automode)
             {
                 // Relleno la lista de mandos
-                List<int> ids = FormMandosConfig.createIDsList();
+                List<int> ids = FormConfigMandos.createIDsList();
                 for (int i = 0; i < CAjustes.num_mandos; i++)
                 {
                     this.listaMandos.Add(new Mando(ids[i]));
@@ -309,15 +309,42 @@ namespace Votaciones_App.Negocio
         {
             if (CAjustes.automode)
             {
-                if (this.listaMandos.Count + 1 <= CAjustes.num_mandos)
+                if (!CAjustes.permitir_cambio_respuesta) // Si no se permite el cambio de respuesta
                 {
-                    this.listaMandos.Add(new Mando(id_mando));
+                    if (idDeMandoEnLaLista(id_mando))
+                    {
+                        Console.WriteLine("El mando ya hizo su voto: " + id_mando);
+                        return;
+                    }
+                    if (this.listaMandos.Count + 1 <= CAjustes.num_mandos)
+                    {
+                        this.listaMandos.Add(new Mando(id_mando));
+                    }
+                    else
+                    {
+                        Console.WriteLine("El máximo de mandos ya ha votado: " + id_mando);
+                        return;
+                    }
                 }
-                else
+                else // Si se permite el cambio de respuesta
                 {
-                    Console.WriteLine("El máximo de mandos ya ha votado: " + id_mando);
-                    return;
+                    if (this.listaMandos.Count + 1 <= CAjustes.num_mandos)
+                    {
+                        if (!idDeMandoEnLaLista(id_mando))
+                        {
+                            this.listaMandos.Add(new Mando(id_mando));
+                        }
+                    }
+                    else
+                    {
+                        if (!idDeMandoEnLaLista(id_mando))
+                        {
+                            Console.WriteLine("El máximo de mandos ya ha votado: " + id_mando);
+                            return;
+                        }
+                    }
                 }
+
             }
 
             if (!idAllowed(id_mando) && !CAjustes.automode)
@@ -334,12 +361,17 @@ namespace Votaciones_App.Negocio
 
             if (CAjustes.automode)
             {
-                colorize = !colorize;
-                this.votingPanel.getVentanaResultados().GetDataGridView().Rows.Add(id_mando, valor);
-                if (colorize)
+                if (!idDeMandoEnLaLista(id_mando) || !getMandoById(id_mando).respondido)
                 {
-                    System.Drawing.Color color = System.Drawing.Color.FromArgb(227, 219, 236);
-                    this.votingPanel.getVentanaResultados().GetDataGridView().Rows[this.votingPanel.getVentanaResultados().GetDataGridView().Rows.Count - 1].DefaultCellStyle.BackColor = color;
+                    colorize = !colorize;
+                    this.votingPanel.getVentanaResultados().GetDataGridView().Rows.Add(id_mando, valor);
+                    int indiceUltimafila = this.votingPanel.getVentanaResultados().GetDataGridView().Rows.Count - 1;
+                    this.listaMandos[this.listaMandos.Count - 1].setRow(this.votingPanel.getVentanaResultados().GetDataGridView().Rows[indiceUltimafila]);
+                    if (colorize)
+                    {
+                        System.Drawing.Color color = System.Drawing.Color.FromArgb(227, 219, 236);
+                        this.votingPanel.getVentanaResultados().GetDataGridView().Rows[this.votingPanel.getVentanaResultados().GetDataGridView().Rows.Count - 1].DefaultCellStyle.BackColor = color;
+                    }
                 }
             }
 
@@ -492,7 +524,17 @@ namespace Votaciones_App.Negocio
 
         private bool idAllowed(int id)
         {
-            return FormMandosConfig.createIDsList().Contains(id);
+            return FormConfigMandos.createIDsList().Contains(id);
+        }
+
+        private bool idDeMandoEnLaLista(int id)
+        {
+            foreach (Mando mando in this.listaMandos)
+            {
+                if (mando.getID() == id)
+                    return true;
+            }
+            return false;
         }
 
         private string parseLetters(string letters)

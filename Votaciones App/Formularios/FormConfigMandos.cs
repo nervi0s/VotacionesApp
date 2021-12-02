@@ -22,6 +22,7 @@ namespace Votaciones_App.Formularios
 
         private void FormConfigMandos_Load(object sender, EventArgs e)
         {
+            this.MaximizeBox = false;
             checkAndSetFileData();
         }
 
@@ -213,6 +214,32 @@ namespace Votaciones_App.Formularios
             {
                 throw e;
             }
+        }
+
+        public static List<int> createIDsList()
+        {
+            string[] ranges = CAjustes.rangos.Split(',');
+            List<int> ids = new List<int>();
+
+            foreach (string range in ranges)
+            {
+                if (range.Contains("-"))
+                {
+                    string[] twoValues = range.Split('-');
+                    int numeroInferior = int.Parse(twoValues[0]);
+                    int numeroSuperior = int.Parse(twoValues[1]);
+
+                    for (int i = numeroInferior; i <= numeroSuperior; i++)
+                    {
+                        ids.Add(i);
+                    }
+                }
+                else
+                {
+                    ids.Add(int.Parse(range));
+                }
+            }
+            return ids;
         }
     }
 }

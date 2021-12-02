@@ -8,6 +8,7 @@ namespace Votaciones_App
         public static int NUMERO_OPCIONES_MAXIMAS = 1;
 
         private int id;
+        private System.Windows.Forms.DataGridViewRow row;
 
         public int cantidadRespuestas;
         public bool respondido;
@@ -23,6 +24,16 @@ namespace Votaciones_App
         public int getID()
         {
             return id;
+        }
+
+        public void setRow(System.Windows.Forms.DataGridViewRow row)
+        {
+            this.row = row;
+        }
+
+        public System.Windows.Forms.DataGridViewRow getRow()
+        {
+            return this.row;
         }
     }
 }

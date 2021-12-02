@@ -35,7 +35,7 @@ namespace Votaciones_App
             List<int> ids = new List<int>();
             if (!CAjustes.automode) // Si no está activo el automode
             {
-                ids = FormMandosConfig.createIDsList();
+                ids = FormConfigMandos.createIDsList();
             }
             //else // Si está activo el automode
             //{
