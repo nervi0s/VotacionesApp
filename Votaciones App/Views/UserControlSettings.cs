@@ -48,30 +48,8 @@ namespace Votaciones_App.Views
             }
         }
 
-        private void comboBox_ajustes_tipo_votacion_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (this.comboBox_ajustes_tipo_votacion.SelectedIndex == 2)
-            {
-                this.numericUpDown_ajustes_num_opciones.Enabled = false;
-                this.numericUpDown_ajustes_num_opciones.Value = 2;
-            }
-            else
-            {
-                this.numericUpDown_ajustes_num_opciones.Enabled = true; ;
-            }
-        }
-
         private void button_mandos_Click(object sender, EventArgs e)
         {
-            //// Abrir formulario de ajustes de Mandos
-            //FormMandosConfig formMandosConfig = new FormMandosConfig();
-            //formMandosConfig.StartPosition = FormStartPosition.CenterParent;
-
-            //if (formMandosConfig.ShowDialog() == DialogResult.OK)
-            //{
-            //    this.button_mandos.Text = formMandosConfig.getMandosTotales().ToString() + " Mandos";
-            //}
-
             FormConfigMandos formConfigMandos = new FormConfigMandos();
             formConfigMandos.StartPosition = FormStartPosition.CenterParent;
 
@@ -91,11 +69,6 @@ namespace Votaciones_App.Views
             {
                 UserControlVoting.array_nombres = FormNamesBind.names;
             }
-        }
-
-        private void numericUpDown_max_op_ValueChanged(object sender, EventArgs e)
-        {
-            Mando.NUMERO_OPCIONES_MAXIMAS = (int)this.numericUpDown_max_op.Value;
         }
 
         private void textBox_ajustes_resultados_path_Click(object sender, EventArgs e)
@@ -119,7 +92,6 @@ namespace Votaciones_App.Views
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "TiempoCrono", this.numericUpDown_ajustes_tiempo_crono.Value.ToString());
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "PermitirCambioRespuesta", this.radioButton_ajustes_cambiar_resp_Si.Checked.ToString());
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "TipoVotacion", this.comboBox_ajustes_tipo_votacion.SelectedIndex.ToString());
-                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "NumeroOpciones", this.numericUpDown_ajustes_num_opciones.Value.ToString());
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "ConexionGrafismo", this.radioButton_ajustes_conexion_grafismo_Si.Checked.ToString());
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Ip", this.textBox_ip.Text);
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "RutaResultados", this.textBox_ajustes_resultados_path.Text);
@@ -128,7 +100,6 @@ namespace Votaciones_App.Views
                 CAjustes.tiempo_crono = (int)this.numericUpDown_ajustes_tiempo_crono.Value;
                 CAjustes.permitir_cambio_respuesta = this.radioButton_ajustes_cambiar_resp_Si.Checked;
                 CAjustes.tipo_votacion = this.comboBox_ajustes_tipo_votacion.SelectedIndex;
-                CAjustes.numero_opciones = (int)this.numericUpDown_ajustes_num_opciones.Value;
                 CAjustes.conexion_grafismo = this.radioButton_ajustes_conexion_grafismo_Si.Checked;
                 CAjustes.ip = this.textBox_ip.Text;
                 CAjustes.ruta_resultados = this.textBox_ajustes_resultados_path.Text;
@@ -143,13 +114,16 @@ namespace Votaciones_App.Views
             if (validaAjustesFicheroXml())
             {
                 // Leer Ajustes del fichero XML y establecer controles
-                this.button_mandos.Text = FormConfigMandos.counterFromString(xmlFile.LeerXml(CAjustes.ruta_ajustes, "Rangos")) + " Mandos";
+                if (CAjustes.automode)
+                    this.button_mandos.Text = xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales") + " Mandos";
+                else
+                    this.button_mandos.Text = FormConfigMandos.counterFromString(xmlFile.LeerXml(CAjustes.ruta_ajustes, "Rangos")) + " Mandos";
+
                 this.numericUpDown_ajustes_tiempo_crono.Value = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "TiempoCrono"));
                 this.textBox_base_id.Text = xmlFile.LeerXml(CAjustes.ruta_ajustes, "BaseAntena");
                 this.radioButton_ajustes_cambiar_resp_Si.Checked = bool.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "PermitirCambioRespuesta"));
                 this.radioButton_ajustes_cambiar_resp_No.Checked = !bool.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "PermitirCambioRespuesta")); ;
                 this.comboBox_ajustes_tipo_votacion.SelectedIndex = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "TipoVotacion"));
-                this.numericUpDown_ajustes_num_opciones.Value = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "NumeroOpciones"));
                 this.textBox_ajustes_resultados_path.Text = System.IO.Path.GetFullPath(xmlFile.LeerXml(CAjustes.ruta_ajustes, "RutaResultados"));
                 this.radioButton_ajustes_conexion_grafismo_Si.Checked = bool.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "ConexionGrafismo"));
                 this.radioButton_ajustes_conexion_grafismo_No.Checked = !bool.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "ConexionGrafismo"));
@@ -164,7 +138,6 @@ namespace Votaciones_App.Views
                 this.radioButton_ajustes_cambiar_resp_Si.Checked = false;
                 this.radioButton_ajustes_cambiar_resp_No.Checked = true;
                 this.comboBox_ajustes_tipo_votacion.SelectedIndex = 0;
-                this.numericUpDown_ajustes_num_opciones.Value = 3;
                 this.textBox_ajustes_resultados_path.Text = System.IO.Path.GetFullPath("./ ");
                 this.radioButton_ajustes_conexion_grafismo_Si.Checked = false;
                 this.radioButton_ajustes_conexion_grafismo_No.Checked = true;
@@ -176,23 +149,11 @@ namespace Votaciones_App.Views
             {
                 this.radioButton_ajustes_cambiar_resp_Si.Enabled = false;
                 this.radioButton_ajustes_cambiar_resp_No.Enabled = false;
-                Mando.NUMERO_OPCIONES_MAXIMAS = (int)this.numericUpDown_max_op.Value;
-            }
-            else
-            {
-                this.label_op_maximas.Visible = false;
-                this.numericUpDown_max_op.Visible = false;
             }
         }
 
         private bool validaAjustesFicheroXml()
         {
-            //if (int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales")) != FormMandosConfig.counterFromString(xmlFile.LeerXml(CAjustes.ruta_ajustes, "Rangos")))
-            //{
-            //    MessageBox.Show("El número de mandos totales debe ser igual que el número de mandos en los rangos. Revisar los ajustes de los mandos", "Error en el archivo XML");
-            //    return false;
-            //}
-
             if (int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "TiempoCrono")) < 1 || int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "TiempoCrono")) > 1000)
             {
                 MessageBox.Show("El tiempo del crono debe estar comprendido entre 1 y 1000. Cargando ajustes por defecto", "Error en el archivo XML");

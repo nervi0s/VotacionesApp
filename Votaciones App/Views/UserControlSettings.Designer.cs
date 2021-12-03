@@ -36,11 +36,7 @@ namespace Votaciones_App.Views
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox_base_id = new System.Windows.Forms.TextBox();
-            this.numericUpDown_max_op = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown_ajustes_num_opciones = new System.Windows.Forms.NumericUpDown();
-            this.label_op_maximas = new System.Windows.Forms.Label();
             this.button_conf_names = new System.Windows.Forms.Button();
-            this.label_numero_opciones = new System.Windows.Forms.Label();
             this.button_mandos = new System.Windows.Forms.Button();
             this.label_id_antena = new System.Windows.Forms.Label();
             this.label_ajustes_puerto = new System.Windows.Forms.Label();
@@ -78,8 +74,6 @@ namespace Votaciones_App.Views
             this.panel_botton.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_max_op)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_ajustes_num_opciones)).BeginInit();
             this.panel_conexion_grafismo.SuspendLayout();
             this.panel_cambio_respuesta.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_ajustes_tiempo_crono)).BeginInit();
@@ -153,11 +147,7 @@ namespace Votaciones_App.Views
             this.groupBox1.AutoSize = true;
             this.tableLayoutPanel3.SetColumnSpan(this.groupBox1, 2);
             this.groupBox1.Controls.Add(this.textBox_base_id);
-            this.groupBox1.Controls.Add(this.numericUpDown_max_op);
-            this.groupBox1.Controls.Add(this.numericUpDown_ajustes_num_opciones);
-            this.groupBox1.Controls.Add(this.label_op_maximas);
             this.groupBox1.Controls.Add(this.button_conf_names);
-            this.groupBox1.Controls.Add(this.label_numero_opciones);
             this.groupBox1.Controls.Add(this.button_mandos);
             this.groupBox1.Controls.Add(this.label_id_antena);
             this.groupBox1.Controls.Add(this.label_ajustes_puerto);
@@ -191,64 +181,7 @@ namespace Votaciones_App.Views
             this.textBox_base_id.Name = "textBox_base_id";
             this.textBox_base_id.Size = new System.Drawing.Size(80, 20);
             this.textBox_base_id.TabIndex = 33;
-            // 
-            // numericUpDown_max_op
-            // 
-            this.numericUpDown_max_op.Location = new System.Drawing.Point(616, 51);
-            this.numericUpDown_max_op.Margin = new System.Windows.Forms.Padding(4);
-            this.numericUpDown_max_op.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown_max_op.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDown_max_op.Name = "numericUpDown_max_op";
-            this.numericUpDown_max_op.Size = new System.Drawing.Size(80, 20);
-            this.numericUpDown_max_op.TabIndex = 19;
-            this.numericUpDown_max_op.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.numericUpDown_max_op.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDown_max_op.ValueChanged += new System.EventHandler(this.numericUpDown_max_op_ValueChanged);
-            // 
-            // numericUpDown_ajustes_num_opciones
-            // 
-            this.numericUpDown_ajustes_num_opciones.Location = new System.Drawing.Point(396, 51);
-            this.numericUpDown_ajustes_num_opciones.Margin = new System.Windows.Forms.Padding(4);
-            this.numericUpDown_ajustes_num_opciones.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.numericUpDown_ajustes_num_opciones.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDown_ajustes_num_opciones.Name = "numericUpDown_ajustes_num_opciones";
-            this.numericUpDown_ajustes_num_opciones.Size = new System.Drawing.Size(80, 20);
-            this.numericUpDown_ajustes_num_opciones.TabIndex = 19;
-            this.numericUpDown_ajustes_num_opciones.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label_op_maximas
-            // 
-            this.label_op_maximas.AutoSize = true;
-            this.label_op_maximas.Location = new System.Drawing.Point(501, 53);
-            this.label_op_maximas.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label_op_maximas.Name = "label_op_maximas";
-            this.label_op_maximas.Size = new System.Drawing.Size(49, 13);
-            this.label_op_maximas.TabIndex = 18;
-            this.label_op_maximas.Text = "Op. max:";
+            this.textBox_base_id.Text = "0";
             // 
             // button_conf_names
             // 
@@ -259,16 +192,6 @@ namespace Votaciones_App.Views
             this.button_conf_names.Text = "Nombres";
             this.button_conf_names.UseVisualStyleBackColor = true;
             this.button_conf_names.Click += new System.EventHandler(this.button_conf_names_Click);
-            // 
-            // label_numero_opciones
-            // 
-            this.label_numero_opciones.AutoSize = true;
-            this.label_numero_opciones.Location = new System.Drawing.Point(283, 53);
-            this.label_numero_opciones.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label_numero_opciones.Name = "label_numero_opciones";
-            this.label_numero_opciones.Size = new System.Drawing.Size(105, 13);
-            this.label_numero_opciones.TabIndex = 18;
-            this.label_numero_opciones.Text = "Número de opciones";
             // 
             // button_mandos
             // 
@@ -394,7 +317,6 @@ namespace Votaciones_App.Views
             this.comboBox_ajustes_tipo_votacion.Name = "comboBox_ajustes_tipo_votacion";
             this.comboBox_ajustes_tipo_votacion.Size = new System.Drawing.Size(104, 21);
             this.comboBox_ajustes_tipo_votacion.TabIndex = 15;
-            this.comboBox_ajustes_tipo_votacion.SelectedIndexChanged += new System.EventHandler(this.comboBox_ajustes_tipo_votacion_SelectedIndexChanged);
             // 
             // textBox_ajustes_resultados_path
             // 
@@ -644,8 +566,6 @@ namespace Votaciones_App.Views
             this.tableLayoutPanel3.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_max_op)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_ajustes_num_opciones)).EndInit();
             this.panel_conexion_grafismo.ResumeLayout(false);
             this.panel_conexion_grafismo.PerformLayout();
             this.panel_cambio_respuesta.ResumeLayout(false);
@@ -680,8 +600,6 @@ namespace Votaciones_App.Views
         private System.Windows.Forms.RadioButton radioButton_ajustes_conexion_grafismo_No;
         private System.Windows.Forms.RadioButton radioButton_ajustes_conexion_grafismo_Si;
         private System.Windows.Forms.Label label_conexion_grafismo;
-        private System.Windows.Forms.NumericUpDown numericUpDown_ajustes_num_opciones;
-        private System.Windows.Forms.Label label_numero_opciones;
         private System.Windows.Forms.Label label_tipo_votacion;
         private System.Windows.Forms.ComboBox comboBox_ajustes_tipo_votacion;
         private System.Windows.Forms.TextBox textBox_ajustes_resultados_path;
@@ -697,8 +615,6 @@ namespace Votaciones_App.Views
         private System.Windows.Forms.Panel panel_license;
         private System.Windows.Forms.Label label_license;
         private System.Windows.Forms.Button button_mandos;
-        private System.Windows.Forms.NumericUpDown numericUpDown_max_op;
-        private System.Windows.Forms.Label label_op_maximas;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.Button button_conf_names;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel_top;

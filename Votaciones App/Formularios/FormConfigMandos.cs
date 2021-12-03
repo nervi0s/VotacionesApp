@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Votaciones_App.Formularios
@@ -30,12 +25,12 @@ namespace Votaciones_App.Formularios
         {
             // Se guardan en el fichero los datos proporcionados desde la UI
             if (this.radioButton_rangos.Checked)
-
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "MandosTotales", counterFromString(this.textBox_rangos.Text).ToString());
             else
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "MandosTotales", this.numericUpDown_num_mandos_totales.Value.ToString());
 
             xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Rangos", this.textBox_rangos.Text);
+            xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Automode", this.radioButton_automode.Checked.ToString());
 
             // Se cargan en memoria (clase CAjustes) los ajustes
             CAjustes.num_mandos = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales"));
@@ -115,6 +110,15 @@ namespace Votaciones_App.Formularios
                 // Leer Ajustes del fichero XML y establecer controles
                 this.numericUpDown_num_mandos_totales.Value = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales"));
                 this.textBox_rangos.Text = xmlFile.LeerXml(CAjustes.ruta_ajustes, "Rangos");
+
+                if (CAjustes.automode)
+                {
+                    this.radioButton_automode.Checked = true;
+                }
+                else
+                {
+                    this.radioButton_rangos.Checked = true;
+                }
             }
             else
             {

@@ -228,7 +228,7 @@ namespace Votaciones_App.Negocio
                     this.choice.ModifyMode = CAjustes.permitir_cambio_respuesta ? 1 : 0;
                     this.choice.SecrecyMode = 0;
                     this.choice.Options = CAjustes.numero_opciones;
-                    this.choice.OptionalN = Mando.NUMERO_OPCIONES_MAXIMAS; // Se usa para determinar a cuantas personas se pueden votar en el multichoice
+                    this.choice.OptionalN = CAjustes.permitir_multichoice ? Mando.NUMERO_OPCIONES_MAXIMAS : 1; // Se usa para determinar a cuantas personas se pueden votar en el multichoice
                     this.choice.StartMode = 1; // Limpia los mandos al empezar la votación
 
                     if (this.choice.Start() == "0") // Start() empieza la votación

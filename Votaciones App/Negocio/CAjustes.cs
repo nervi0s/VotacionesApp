@@ -6,7 +6,7 @@ namespace Votaciones_App
     {
         public static int base_antena_id;
         public static int tipo_conexion; // 1 Para conexión USB. 2 Para conexión Ethernet *
-        public static bool automode; // True para mandos sin rangos conocidos. False para mandos con rangos conocidos *
+        public static bool automode; // True para mandos sin rangos conocidos. False para mandos con rangos conocidos
         public static bool permitir_multichoice;
         public static int tiempo_crono;
         public static int num_mandos;
@@ -14,6 +14,7 @@ namespace Votaciones_App
         public static string ruta_resultados;
         public static int tipo_votacion;
         public static int numero_opciones;
+        public static int numero_opciones_elegibles;
         public static int puerto_programa_externo_envio;
         public static bool permitir_cambio_respuesta;
         public static string ruta_ajustes = "./Ajustes.xml";

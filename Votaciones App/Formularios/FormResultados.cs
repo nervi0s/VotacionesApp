@@ -37,14 +37,6 @@ namespace Votaciones_App
             {
                 ids = FormConfigMandos.createIDsList();
             }
-            //else // Si está activo el automode
-            //{
-            //    ids = new List<int>();
-            //    for (int i = 1; i <= CAjustes.num_mandos; i++)
-            //    {
-            //        ids.Add(i);
-            //    }
-            //}
 
             this.dataGridView1.Columns.Clear(); // Se limpia el dataGridView
             this.dataGridView1.Rows.Clear();  // Se limpia el dataGridView
@@ -121,6 +113,8 @@ namespace Votaciones_App
                     Console.WriteLine(e.Message);
                 }
             }
+            this.dataGridView1.Refresh();
+            this.dataGridView1.ClearSelection();
         }
 
         public void setLocation(Point location)

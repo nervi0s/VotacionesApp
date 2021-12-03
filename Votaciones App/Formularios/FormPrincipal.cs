@@ -205,6 +205,7 @@ namespace Votaciones_App
             {
                 // Crear XML
                 ArrayList lista = new ArrayList();
+                lista.Add("Automode");
                 lista.Add("MandosTotales");
                 lista.Add("Rangos");
                 lista.Add("TiempoCrono");
@@ -213,6 +214,7 @@ namespace Votaciones_App
                 lista.Add("PermitirMultichoice");
                 lista.Add("TipoVotacion");
                 lista.Add("NumeroOpciones");
+                lista.Add("OpcionesElegibles");
                 lista.Add("RutaResultados");
                 lista.Add("ConexionGrafismo");
                 lista.Add("Ip");
@@ -234,6 +236,7 @@ namespace Votaciones_App
                 xmlFile.CreaFicheroVacio("Ajustes", lista, CAjustes.ruta_ajustes);
 
                 // Escribe el XML con valores por defecto
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Automode", "True");
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "MandosTotales", "100");
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Rangos", "1-100");
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "TiempoCrono", "120");
@@ -242,6 +245,7 @@ namespace Votaciones_App
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "PermitirMultichoice", "False");
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "TipoVotacion", "0");
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "NumeroOpciones", "3");
+                xmlFile.EscribirXml(CAjustes.ruta_ajustes, "OpcionesElegibles", "3");
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "RutaResultados", "./");
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "ConexionGrafismo", "False");
                 xmlFile.EscribirXml(CAjustes.ruta_ajustes, "Ip", "127.0.0.1");
@@ -263,7 +267,11 @@ namespace Votaciones_App
 
             // Se cargan en memoria ajustes básicos
             CAjustes.rangos = xmlFile.LeerXml(CAjustes.ruta_ajustes, "Rangos");
-            CAjustes.num_mandos = Formularios.FormConfigMandos.counterFromString(CAjustes.rangos);
+            CAjustes.num_mandos = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "MandosTotales"));
+            CAjustes.automode = bool.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "Automode"));
+            CAjustes.numero_opciones = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "NumeroOpciones"));
+            CAjustes.numero_opciones_elegibles = int.Parse(xmlFile.LeerXml(CAjustes.ruta_ajustes, "OpcionesElegibles"));
+            Mando.NUMERO_OPCIONES_MAXIMAS = CAjustes.numero_opciones_elegibles;
         }
 
         // Carga un diálogo de selección para la multirespuesta
