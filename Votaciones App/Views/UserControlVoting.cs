@@ -92,6 +92,7 @@ namespace Votaciones_App.Views
             this.ventanaResultados.Show();
             this.ventanaResultados.BringToFront();
         }
+
         // ##############   Public methods   ############## \\
         public int getTipoRecuento()
         {
@@ -163,8 +164,8 @@ namespace Votaciones_App.Views
                             contador[i]++;
                         }
                     }
-
-                    chart.Series["Votos"].Points.AddXY(array_nombres == null ? array_numeros[i] : array_nombres[i], contador[i]);
+                    // Se añaden los valores del eje X y del eje Y, previa comprobación de posibles valores vacíos del eje X
+                    chart.Series["Votos"].Points.AddXY(array_nombres == null ? array_numeros[i] : array_nombres[i] == string.Empty ? (i + 1).ToString() : array_nombres[i], contador[i]);
                     chart.Refresh();
                 }
             }
