@@ -87,6 +87,10 @@ namespace Votaciones_App
             {
                 try
                 {
+                    // En caso de automode, lista_mandos aumenta dinámicamente cuando se recibe un voto, con esto se evita excepciones si no se ha alcanzado el número de madnos totales
+                    if (i > lista_mandos.Count - 1)
+                        break;
+
                     if (lista_mandos[i].respuesta.Length > 1)
                     {
                         if (UserControlVoting.array_nombres == null)
