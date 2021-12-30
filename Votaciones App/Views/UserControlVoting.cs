@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+using Votaciones_App.Negocio;
 
 namespace Votaciones_App.Views
 {
@@ -23,6 +24,8 @@ namespace Votaciones_App.Views
         private IPEndPoint endpoint;
         private Socket socket;
         private Thread reconexion;
+
+        public static string[] array_nombres;
 
         // ##############   Constructor  ############## \\
         public UserControlVoting()
@@ -129,66 +132,29 @@ namespace Votaciones_App.Views
             return this.ventanaResultados;
         }
 
-        public void inicializarGrafica()
+        public void inicializarGrafica(List<Option> options)
         {
             this.chart.Series.Clear();
+            this.chart.ChartAreas.Clear();
+
             this.chart.Series.Add("Votos");
-            this.chart.ChartAreas["ChartArea1"].AxisX.MajorGrid.LineWidth = 0;
-            this.chart.ChartAreas["ChartArea1"].AxisX.LabelStyle.Font = new Font("Courier New", 14, FontStyle.Bold);
-            this.chart.ChartAreas["ChartArea1"].AxisX.Interval = 1; // Show the axis X names in 1 interval
-            this.chart.Series["Votos"].IsValueShownAsLabel = true; // This will display Data Label on the bar.
-            this.chart.Series["Votos"]["LabelStyle"] = "Top";  // This will change Label Position
-            this.chart.Series["Votos"].LabelForeColor = Color.Purple;
+            this.chart.ChartAreas.Add("ChartArea");
+            this.chart.Series["Votos"].XValueMember = "id"; // Bind with Option object name "id"
+            this.chart.Series["Votos"].YValueMembers = "totalVotes"; // Bind with Option object name "totalVotes"
+            this.chart.Series["Votos"].IsValueShownAsLabel = true; // This will display Data Label on the bar
+            this.chart.Series["Votos"]["LabelStyle"] = "Top"; // This will change Label Position
             this.chart.Series["Votos"].Font = new Font("Courier New", 14, FontStyle.Bold);
-        }
+            this.chart.Series["Votos"].LabelForeColor = Color.Purple;
+            this.chart.ChartAreas["ChartArea"].AxisX.LabelStyle.Font = new Font("Courier New", 14, FontStyle.Bold);
+            this.chart.ChartAreas["ChartArea"].BackColor = Color.FromArgb(249, 237, 255);
+            this.chart.ChartAreas["ChartArea"].AxisX.Interval = 1; // Show the axis X names in 1 interval
+            this.chart.ChartAreas["ChartArea"].AxisX.MajorGrid.LineWidth = 0;
+            this.chart.ChartAreas["ChartArea"].AxisY.MajorGrid.LineWidth = 1;
+            this.chart.ChartAreas["ChartArea"].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+            this.chart.ChartAreas["ChartArea"].AxisY.MajorGrid.LineColor = Color.FromArgb(50, Color.Black);
+            this.chart.DataSource = options; // Bind with the data source
 
-        private string[] array_letras = new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-        private string[] array_numeros = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
-        public static string[] array_nombres;
-
-        public void actualizarGrafica(List<Mando> listaMandos, int votados)
-        {
-            inicializarGrafica();
-
-            int[] contador = new int[CAjustes.numero_opciones];
-            if (CAjustes.tipo_votacion == 0)
-            {
-                // Para todos los valores de la votacion
-                for (int i = 0; i < CAjustes.numero_opciones; i++)
-                {
-                    // Recuenta
-                    for (int j = 0; j < listaMandos.Count; j++)
-                    {
-                        if (listaMandos[j].respuesta.Split(';').Contains(this.array_numeros[i]))
-                        {
-                            contador[i]++;
-                        }
-                    }
-                    // Se añaden los valores del eje X y del eje Y, previa comprobación de posibles valores vacíos del eje X
-                    chart.Series["Votos"].Points.AddXY(array_nombres == null ? array_numeros[i] : array_nombres[i] == string.Empty ? (i + 1).ToString() : array_nombres[i], contador[i]);
-                    chart.Refresh();
-                }
-            }
-
-            if (CAjustes.tipo_votacion == 1)
-            {
-                // Para todos los valores de la votacion
-                for (int i = 0; i < CAjustes.numero_opciones; i++)
-                {
-                    // Recuenta
-                    for (int j = 0; j < CAjustes.num_mandos; j++)
-                    {
-                        if (listaMandos[j].respuesta.Split(';').Contains(this.array_letras[i]))
-                        {
-                            contador[i]++;
-                        }
-                    }
-                    chart.Series["Votos"].Points.AddXY(array_nombres == null ? array_letras[i] : array_nombres[i], contador[i]);
-                    chart.Refresh();
-                }
-            }
-
-            comprueba_si_hay_ganador(contador, votados);
+            Option.chart = this.chart; // Bind with the static Chart object of the Option class
         }
 
         public void envia_mensaje_progamaExterno(string instruccion)
@@ -224,50 +190,6 @@ namespace Votaciones_App.Views
         }
 
         // ##############   Auxiliary private functions   ############## \\
-        private void comprueba_si_hay_ganador(int[] contador, int votados)
-        {
-            int votos_restantes = CAjustes.num_mandos - votados;
-            int indice_ganador = -1;
-            int votos_ganador = 0;
-
-            // Busco el mas votado
-            for (int i = 0; i < CAjustes.numero_opciones; i++)
-            {
-                if (votos_ganador <= contador[i])
-                {
-                    indice_ganador = i;
-                    votos_ganador = contador[i];
-                }
-            }
-
-            bool hay_ganador = true;
-
-            // Miro si es ganador
-            for (int i = 0; i < CAjustes.numero_opciones; i++)
-            {
-                if (i != indice_ganador)
-                {
-                    if (contador[i] + votos_restantes >= votos_ganador)
-                        hay_ganador = false && hay_ganador;
-                    else
-                        hay_ganador = true && hay_ganador;
-
-                }
-            }
-
-            //Si hay ganador coloreo
-            if (hay_ganador)
-            {
-                for (int i = 0; i < CAjustes.numero_opciones; i++)
-                {
-                    if (i == indice_ganador)
-                        this.chart.Series["Votos"].Points[i].Color = Color.LightGreen;
-                    else
-                        this.chart.Series["Votos"].Points[i].Color = Color.Tomato;
-                }
-            }
-        }
-
         private bool conecta_cliente()
         {
             try

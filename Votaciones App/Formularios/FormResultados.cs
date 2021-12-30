@@ -91,16 +91,16 @@ namespace Votaciones_App
                     if (i > lista_mandos.Count - 1)
                         break;
 
-                    if (lista_mandos[i].respuesta.Length > 1)
+                    if (lista_mandos[i].getRespuestas().Length > 1)
                     {
                         if (UserControlVoting.array_nombres == null)
                         {
-                            this.dataGridView1.Rows[i].Cells[1].Value = lista_mandos[i].respuesta.Substring(1);
+                            this.dataGridView1.Rows[i].Cells[1].Value = lista_mandos[i].getRespuestas().Substring(1);
                         }
                         else
                         {
                             string toUserInterface = string.Empty;
-                            string[] respuestas = lista_mandos[i].respuesta.Substring(1).Split(';');
+                            string[] respuestas = lista_mandos[i].getRespuestas().Substring(1).Split(';');
                             foreach (string respuesta in respuestas)
                             {
                                 if (CAjustes.tipo_votacion == 0) // Votación de números

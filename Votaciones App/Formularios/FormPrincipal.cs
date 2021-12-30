@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Windows.Forms;
-using System.IO;
 using System.Collections;
-using Votaciones_App.Views;
-using Votaciones_App.Negocio;
 using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
+using Votaciones_App.Negocio;
+using Votaciones_App.Views;
 
 namespace Votaciones_App
 {
@@ -98,7 +98,6 @@ namespace Votaciones_App
             }
 
             this.voteManager.resetVotacion();
-            this.voteManager.actualizarGrafico();
             this.panel_root.Controls.Add(votingPanel);
         }
 

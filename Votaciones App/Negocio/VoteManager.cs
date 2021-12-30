@@ -34,6 +34,10 @@ namespace Votaciones_App.Negocio
 
         private Thread cuentaAtrasThread;
 
+        private List<Option> options;
+
+        public static int maximoParaGanar = 0;
+
         // ##############   Constructor  ############## \\
         public VoteManager(int baseID, int connectionMode)
         {
@@ -76,7 +80,7 @@ namespace Votaciones_App.Negocio
 
             //Configuración del panel de votaciones
             this.votingPanel.setImageVoteStatus(Properties.Resources.verde);
-            this.votingPanel.inicializarGrafica();
+            this.votingPanel.inicializarGrafica(this.options);
 
             // Programa externo manejado por el panel de votaciones
             if (CAjustes.conexion_grafismo)
@@ -90,7 +94,7 @@ namespace Votaciones_App.Negocio
             // Iniciaciación de la cuenta atrás
             iniciarCuentaAtras();
 
-            actualizarGrafico();
+            setVotosParaGanar();
         }
 
         public void finalizarVotacion()
@@ -121,6 +125,21 @@ namespace Votaciones_App.Negocio
 
         public void resetVotacion()
         {
+            // Se crean las opciones elegidas
+            this.options = new List<Option>();
+            for (int i = 1; i <= CAjustes.numero_opciones; i++)
+            {
+                if (UserControlVoting.array_nombres != null)
+                {
+                    this.options.Add(new Option(UserControlVoting.array_nombres[i - 1]));
+                }
+                else
+                {
+                    this.options.Add(new Option(i.ToString()));
+
+                }
+            }
+
             // Vacío la lista de mandos
             if (listaMandos != null)
             {
@@ -135,7 +154,7 @@ namespace Votaciones_App.Negocio
                 List<int> ids = FormConfigMandos.createIDsList();
                 for (int i = 0; i < CAjustes.num_mandos; i++)
                 {
-                    this.listaMandos.Add(new Mando(ids[i]));
+                    this.listaMandos.Add(new Mando(ids[i], this.options));
                 }
             }
 
@@ -318,7 +337,7 @@ namespace Votaciones_App.Negocio
                     }
                     if (this.listaMandos.Count + 1 <= CAjustes.num_mandos)
                     {
-                        this.listaMandos.Add(new Mando(id_mando));
+                        this.listaMandos.Add(new Mando(id_mando, this.options));
                     }
                     else
                     {
@@ -332,7 +351,7 @@ namespace Votaciones_App.Negocio
                     {
                         if (!idDeMandoEnLaLista(id_mando))
                         {
-                            this.listaMandos.Add(new Mando(id_mando));
+                            this.listaMandos.Add(new Mando(id_mando, this.options));
                         }
                     }
                     else
@@ -378,40 +397,13 @@ namespace Votaciones_App.Negocio
             // Check si se permite o no cambio de respuesta
             if (CAjustes.permitir_cambio_respuesta)
             {
-                if (CAjustes.permitir_multichoice)
-                {
-                    if (getMandoById(id_mando).cantidadRespuestas < Mando.NUMERO_OPCIONES_MAXIMAS)
-                    {
-                        if (!getMandoById(id_mando).respuesta.Split(';').Contains(valor))
-                        {
-                            getMandoById(id_mando).respondido = true;
-                            getMandoById(id_mando).respuesta += ";" + valor;
-                            getMandoById(id_mando).cantidadRespuestas++;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Voto repetido realizado por el mando: " + id_mando);
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("El mando ya ha agotado su cantidad respuestas permitidas: " + id_mando);
-                        return;
-                    }
-                }
-                else
-                {
-                    getMandoById(id_mando).respondido = true;
-                    getMandoById(id_mando).respuesta = valor;
-                }
+                getMandoById(id_mando).vote(valor);
             }
             else
             {
                 if (!getMandoById(id_mando).respondido)
                 {
-                    getMandoById(id_mando).respondido = true;
-                    getMandoById(id_mando).respuesta = valor;
+                    getMandoById(id_mando).vote(valor);
                 }
                 else
                 {
@@ -426,7 +418,6 @@ namespace Votaciones_App.Negocio
             this.votingPanel.getVentanaResultados().actualizar_grid(this.listaMandos);
             // Panel de votaciones/
             actualizarRecuento();
-            actualizarGrafico();
             // Crear fichero CSV
             guardarResultadosCSV();
         }
@@ -467,9 +458,9 @@ namespace Votaciones_App.Negocio
             }
         }
 
-        public void actualizarGrafico()
+        private void setVotosParaGanar()
         {
-            this.votingPanel.actualizarGrafica(this.listaMandos, recuentaVotados());
+            maximoParaGanar = (CAjustes.num_mandos / 2) + 1;
         }
 
         private void guardarResultadosCSV()
@@ -479,7 +470,7 @@ namespace Votaciones_App.Negocio
 
             foreach (Mando mando in this.listaMandos)
             {
-                if (string.IsNullOrEmpty(mando.respuesta))
+                if (string.IsNullOrEmpty(mando.getRespuestas()))
                 {
                     resultados = resultados + mando.getID() + ";" + "\n";
                 }
@@ -487,13 +478,13 @@ namespace Votaciones_App.Negocio
                 {
                     if (UserControlVoting.array_nombres == null) // Si no se han relacionado opciones de votos con nombres
                     {
-                        resultados = resultados + mando.getID() + mando.respuesta + "\n";
+                        resultados = resultados + mando.getID() + mando.getRespuestas() + "\n";
                     }
                     else
                     {
                         if (CAjustes.tipo_votacion == 0) // Si es una votación de números
                         {
-                            List<int> numerosVotados = getNumbersFromString(mando.respuesta);
+                            List<int> numerosVotados = getNumbersFromString(mando.getRespuestas());
                             int ultimoVotoRealizado = numerosVotados[numerosVotados.Count - 1];
                             string infoVotos = string.Empty;
 
@@ -505,7 +496,7 @@ namespace Votaciones_App.Negocio
                         }
                         else if (CAjustes.tipo_votacion == 1) // Si es una votación de letras
                         {
-                            List<int> numerosVotados = getNumericEquivalent(mando.respuesta);
+                            List<int> numerosVotados = getNumericEquivalent(mando.getRespuestas());
                             int ultimoVotoRealizado = numerosVotados[numerosVotados.Count - 1];
                             string infoVotos = string.Empty;
 

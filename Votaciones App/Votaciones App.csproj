@@ -112,6 +112,7 @@
     <Compile Include="Negocio\CFileXML.cs" />
     <Compile Include="Negocio\CSeguridad.cs" />
     <Compile Include="Negocio\Mando.cs" />
+    <Compile Include="Negocio\Option.cs" />
     <Compile Include="Negocio\VoteManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

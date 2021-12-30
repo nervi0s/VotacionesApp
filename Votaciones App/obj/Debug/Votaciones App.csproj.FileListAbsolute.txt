@@ -16,3 +16,23 @@ C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\V
 C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.exe
 C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.pdb
 C:\Users\David\Desktop\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.csproj.AssemblyReference.cache
+F:\Proyecto Mandos para Votación\Votaciones App\bin\Debug\Votaciones App.exe.config
+F:\Proyecto Mandos para Votación\Votaciones App\bin\Debug\Votaciones App.exe
+F:\Proyecto Mandos para Votación\Votaciones App\bin\Debug\Votaciones App.pdb
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.csproj.AssemblyReference.cache
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Interop.SunVote.dll
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.csproj.ResolveComReference.cache
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Formularios.EthernetOptions.resources
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Formularios.FormConfigMandos.resources
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Formularios.FormMandosConfig.resources
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Formularios.FormNamesBind.resources
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.FormPrincipal.resources
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.FormResultados.resources
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Properties.Resources.resources
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Views.UserControlConnectionChoice.resources
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Views.UserControlSettings.resources
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones_App.Views.UserControlVoting.resources
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.csproj.GenerateResource.cache
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.csproj.CoreCompileInputs.cache
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.exe
+F:\Proyecto Mandos para Votación\Votaciones App\obj\Debug\Votaciones App.pdb
